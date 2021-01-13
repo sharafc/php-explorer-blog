@@ -1,0 +1,159 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    box-sizing: border-box;
+    font-family: Roboto, "Open Sans", sans-serif;
+    font-size: 14px;
+    max-width: 66vw;
+    margin: auto;
+}
+
+header,
+nav,
+main,
+footer {
+    border: 1px dashed #ccc;
+    border-radius: 5px;
+    margin: 0.5em 0;
+    padding: 1em;
+}
+
+/* Form Styles */
+fieldset {
+    border: 1px dashed #ccc;
+}
+
+fieldset,
+input,
+textarea,
+select {
+    border-radius: 5px;
+    margin: 0.25em;
+    padding: 0.25em;
+}
+
+.login {
+    text-align: right;
+}
+
+.dashboard fieldset {
+    display: flex;
+    flex-direction: column;
+}
+
+.image-field {
+    width: 75%;
+}
+
+.image-align {
+    float: right;
+}
+
+/* Navigation Styles */
+nav {
+    display: flex;
+}
+
+nav span {
+    display: inline-block;
+    padding: 0.5em;
+}
+
+nav .active {
+    font-weight: 600;
+}
+
+.logout {
+    float: right;
+}
+
+/* Header Styling */
+header {
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+}
+
+.header-meta span {
+    margin: 0 0.25em;
+    padding: 0.5em;
+}
+
+.header-meta img {
+    margin-right: 0.5em;
+    width: 1em;
+}
+
+.header-logo {
+    margin-top: 3em;
+    text-align: center;
+}
+
+/* Main content Styling */
+main {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.meta {
+    font-style: italic;
+}
+
+article:not(:last-child) {
+	border-bottom: 1px dotted #000;
+}
+
+div.success,
+div.error {
+    border: 1px dashed green;
+    border-radius: 5px;
+    color: green;
+    font-weight: 600;
+    padding: 0.5em;
+    text-align: center;
+}
+
+div.error {
+    border: 1px dashed red;
+    color: red;
+}
+
+.col-100 {
+    flex: 100%;
+}
+
+.col-66 {
+    flex: 66%;
+}
+
+.col-33 {
+    flex: 33%;
+}
+
+
+/* Image Styles */
+.teaser-image {
+    border: 1px dotted #000;
+    max-width: 25%;
+    margin-bottom: 0.25em;
+}
+
+.left {
+    float: left;
+    margin-right: 1em;
+}
+
+.right {
+    float: right;
+    margin-left: 1em;
+}
+
+/* Footer Styles */
+footer {
+    margin-bottom: 2em;
+    text-align: center;
+}
