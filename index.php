@@ -141,19 +141,20 @@ if (DEBUG_ARRAY) {
             <?php endforeach ?>
         <?php endif ?>
     </nav>
+
     <main>
         <?php if ($blogPosts) : ?>
             <?php foreach ($blogPosts as $blogPost) : ?>
+                <!-- Blog post -->
                 <article>
                     <h2><?= $blogPost["blog_headline"] ?></h2>
                     <div class="meta">
                         <p>Category: <a href="?action=showCategory&id=<?= $blogPost["cat_id"] ?>"><?= $blogPost["cat_name"] ?></a></p>
                         <p>Autor: <?= $blogPost["usr_firstname"] ?> <?= $blogPost["usr_lastname"]  ?> from <?= $blogPost["usr_city"] ?></p>
-                        <p>Publishing date: <?= formattedDate($blogPost["blog_date"]); ?></p>
+                        <p>Publishing date: <?= formattedDate($blogPost["blog_date"]) ?></p>
                     </div>
                     <?php if (isset($blogPost["blog_imagePath"])) : ?>
-                        <img src="<?= $blogPost["blog_imagePath"] ?>" class="teaser-image <?= $blogPost["blog_imageAlignment"] ?>"
-                        alt="<?= $blogPost["blog_headline"] ?>" title="<?= $blogPost["blog_headline"] ?>">
+                        <img src="<?= $blogPost["blog_imagePath"] ?>" class="teaser-image <?= $blogPost["blog_imageAlignment"] ?>" alt="<?= $blogPost["blog_headline"] ?>" title="<?= $blogPost["blog_headline"] ?>">
                     <?php endif ?>
                     <p><?= nl2br($blogPost["blog_content"]) ?></p>
                     <?php if (!isset($blogpostId)) : ?>

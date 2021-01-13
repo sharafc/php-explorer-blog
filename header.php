@@ -82,6 +82,7 @@ if (isset($_POST["loginSent"])) {
 }
 ?>
 <header>
+    <!-- "Profile" links or login form -->
     <?php if (isset($_SESSION["id"])) : ?>
         <div class="header-meta">
             <?php if (isset($_SESSION["firstname"]) && isset($_SESSION["lastname"])) : ?>

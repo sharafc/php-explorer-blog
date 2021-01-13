@@ -251,12 +251,14 @@ if (isset($_POST["addBlogpostSent"])) {
     <?php include_once("./header.php") ?>
 
     <main>
+        <!-- General transaction feedback -->
         <?php if (isset($transactionResultState)) : ?>
             <div class="<?= $transactionResultState["state"] ?> col-100">
                 <?= $transactionResultState["message"] ?>
             </div>
         <?php endif ?>
 
+        <!-- Blogpost form -->
         <form action="" method="POST" class="dashboard col-66" enctype="multipart/form-data">
             <input type="hidden" name="addBlogpostSent">
             <fieldset>
@@ -297,6 +299,7 @@ if (isset($_POST["addBlogpostSent"])) {
             </fieldset>
         </form>
 
+        <!-- Category form -->
         <form action="" method="POST" class="dashboard col-33">
             <input type="hidden" name="addCategorySent">
             <fieldset>

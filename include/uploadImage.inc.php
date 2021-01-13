@@ -71,15 +71,15 @@ function uploadImage(
         echo "<p class='debugImageUpload'><b>Line " . __LINE__ . "</b>: \$imageMimeType: $imageMimeType <i>(" . basename(__FILE__) . ")</i></p>\r\n";
     }
 
-    if (!in_array($imageMimeType, $allowedMimeTypes)) { // check for allowed mime types
+    if (!in_array($imageMimeType, $allowedMimeTypes)) { // Check for allowed mime types
         $errorMessage = "Not an allowed Mime type";
-    } elseif ($imageHeight > $imageMaxHeight) { // check for allowed image height
+    } elseif ($imageHeight > $imageMaxHeight) { // Check for allowed image height
         $errorMessage = "Image height exceeds the allowed height of $imageMaxHeight pixel";
-    } elseif ($imageWidth > $imageMaxWidth) { // check for allowed image width
+    } elseif ($imageWidth > $imageMaxWidth) { // Check for allowed image width
         $errorMessage = "Image width exceeds the allowed width of $imageMaxWidth pixel";
-    } elseif ($fileSize > $imageMaxSize) { // check for allowed file size
+    } elseif ($fileSize > $imageMaxSize) { // Check for allowed file size
         $errorMessage = "File size exceeds the allowd size of " . round($imageMaxSize / 1024, 2) . "kB";
-    } else { // no errors
+    } else { // No errors
         $errorMessage = NULL;
     }
 
@@ -89,7 +89,7 @@ function uploadImage(
             echo "<p class='debugImageUpload ok'><b>Line " . __LINE__ . "</b>: No errors in image validation... <i>(" . basename(__FILE__) . ")</i></p>\r\n";
         }
 
-        // save image to disk
+        // Save image to disk
         if (!@move_uploaded_file($fileTempPath, $fileTargetPath)) {
             if (DEBUG_F) {
                 echo "<p class='debugImageUpload err'><b>Line " . __LINE__ . "</b>: Error while moving file from <i>'$fileTempPath'</i> to <i>'$fileTargetPath'</i>! <i>(" . basename(__FILE__) . ")</i></p>\r\n";
