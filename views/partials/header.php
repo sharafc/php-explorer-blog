@@ -5,7 +5,6 @@ if (strpos($_SERVER["REQUEST_URI"], "dashboard") !== false) {
         "url" => "/home",
         "image" => "home.svg",
         "title" => "Home"
-
     ];
 } else {
     $linkTarget = [
@@ -30,12 +29,6 @@ if (isset($_POST["loginSent"])) {
     // Remove whitespaces and empty values from error array
     $errorMap = array_map('trim', $error);
     $errorMap = array_filter($errorMap);
-    if (DEBUG_ARRAY) {
-        echo "<pre class='debug'>Line <b>" . __LINE__ . "</b> <i>(" . basename(__FILE__) . ")</i>:<br>\r\n";
-        print_r($errorMap);
-        print_r($login);
-        echo "</pre>";
-    }
 
     if (count($errorMap) === 0) {
         // Make sure we have a db connection
@@ -50,22 +43,12 @@ if (isset($_POST["loginSent"])) {
 
         // Get first data row, false if no entry was found
         $user = $statement->fetch(PDO::FETCH_ASSOC);
-        if (DEBUG_DB) {
-            if ($statement->errorInfo()[2]) {
-                echo "<p class='debug err'><b>Line " . __LINE__ . "</b>: " . $statement->errorInfo()[2] . " <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-            }
+        if ($statement->errorInfo()[2]) {
+            logger("Error while fetching category", $statement->errorInfo()[2]);
         }
-        if (DEBUG_ARRAY) {
-            echo "<pre class='debug'>Line <b>" . __LINE__ . "</b> <i>(" . basename(__FILE__) . ")</i>:<br>\r\n";
-            print_r($user);
-            echo "</pre>";
-        }
+
         if ($user) {
             if (password_verify($login["password"], $user["usr_password"])) {
-                if (DEBUG) {
-                    echo "<p class='debugDb'><b>Line " . __LINE__ . ":</b> Credentials correct, redirect to Dashboard... <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-                }
-
                 // Add values to session and redirect to dashboard
                 $_SESSION["id"] = $user["usr_id"];
                 $_SESSION["firstname"] = $user["usr_firstname"];

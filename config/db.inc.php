@@ -9,21 +9,11 @@
  */
 function dbConnect($dbname = DB_NAME)
 {
-    if (DEBUG_DB) {
-        echo "<p class='debugDb'><b>Line " . __LINE__ . ":</b> Trying to connect to database <b>$dbname</b>... <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-    }
-
     try {
         $pdo = new PDO(DB_SYSTEM . ":host=" . DB_HOST . "; dbname=$dbname; charset=utf8mb4", DB_USER, DB_PWD);
     } catch (PDOException $error) {
-        if (DEBUG_DB) {
-            echo "<p class='error'><b>Line " . __LINE__ . ":</b> <i>ERROR: " . $error->GetMessage() . " </i> <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-        }
+        logger("Error handling the database connection:", $error->GetMessage());
         exit;
-    }
-
-    if (DEBUG_DB) {
-        echo "<p class='debugDb ok'><b>Line " . __LINE__ . ":</b> Successfully connected to <b>$dbname</b>. <i>(" . basename(__FILE__) . ")</i></p>\r\n";
     }
 
     return $pdo;

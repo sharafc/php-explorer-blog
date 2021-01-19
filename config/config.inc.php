@@ -15,12 +15,6 @@ define("LOGGER_TYPE_SCREEN", 2);
 define("LOGGER_TYPE_CONSOLE", 4);
 define("LOGGER_TYPE_DEFAULT", LOGGER_TYPE_FILE | LOGGER_TYPE_CONSOLE);
 
-/* Debugging switches */
-define("DEBUG", false);          // Debugging for main document
-define("DEBUG_F", false);        // Debugging for functions
-define("DEBUG_ARRAY", false);    // Debugging for arrays
-define("DEBUG_DB", true);       // Debugging for database
-
 /* Database options */
 define("DB_SYSTEM", "mysql");
 define("DB_HOST", "localhost");
