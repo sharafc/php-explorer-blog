@@ -26,7 +26,7 @@ logger($message, $data, LOGGER_INFO);
     <meta charset="utf-8">
     <title>Blog | Index</title>
     <link rel="stylesheet" href="<?= DOMAIN_SUB_STRUCTURE ?>/statics/css/main.css">
-    <link rel="stylesheet" href="<?= DOMAIN_SUB_STRUCTURE ?>/statics/css/debug.css">
+    <link rel="stylesheet" href="<?= DOMAIN_SUB_STRUCTURE ?>/statics/css/logger.css">
 </head>
 
 <body>
