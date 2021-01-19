@@ -52,7 +52,7 @@ function uploadImage(
     $fileNamePrefix = rand(1, 999999) . str_shuffle("abcdefghijklmnopqrstuvwxyz") . time();
 
     // Concatinate all info to one file path
-    $fileTargetPath = $uploadPath . DELIMITER_PATH . $fileNamePrefix . "_" . $fileNameQualified . DELIMITER_FILE . $fileType;
+    $fileTargetPath = $uploadPath . DIRECTORY_SEPARATOR . $fileNamePrefix . "_" . $fileNameQualified . DELIMITER_FILE . $fileType;
     if (DEBUG_F) {
         echo "<p class='debugImageUpload'><b>Line " . __LINE__ . "</b>: \$fileSize: " . round($fileSize / 1024, 2) . "kB <i>(" . basename(__FILE__) . ")</i></p>\r\n";
         echo "<p class='debugImageUpload'><b>Line " . __LINE__ . "</b>: \$fileTempPath: $fileTempPath <i>(" . basename(__FILE__) . ")</i></p>\r\n";

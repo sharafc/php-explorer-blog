@@ -1,15 +1,15 @@
 <?php
 // Decide with page to link to in meta header, sadly str_contains only works in PHP8
-if (strpos($_SERVER['SCRIPT_NAME'], "dashboard.php") !== false) {
+if (strpos($_SERVER["REQUEST_URI"], "dashboard") !== false) {
     $linkTarget = [
-        "url" => "index.php",
+        "url" => "/home",
         "image" => "home.svg",
         "title" => "Home"
 
     ];
 } else {
     $linkTarget = [
-        "url" => "dashboard.php",
+        "url" => "/dashboard",
         "image" => "dashboard.svg",
         "title" => "Dashboard"
     ];
@@ -70,7 +70,8 @@ if (isset($_POST["loginSent"])) {
                 $_SESSION["id"] = $user["usr_id"];
                 $_SESSION["firstname"] = $user["usr_firstname"];
                 $_SESSION["lastname"] = $user["usr_lastname"];
-                header("Location: dashboard.php");
+                header("Location: /dashboard");
+                //session_regenerate_id();
                 exit;
             } else { // Passwords do not match
                 $errorLogin = "Login credentials incorrect.";
@@ -87,18 +88,18 @@ if (isset($_POST["loginSent"])) {
         <div class="header-meta">
             <?php if (isset($_SESSION["firstname"]) && isset($_SESSION["lastname"])) : ?>
                 <span>
-                    <img src="./css/avatar.svg"><?= cleanString($_SESSION["firstname"]) ?> <?= cleanString($_SESSION["lastname"]) ?>
+                    <img src="<?= DOMAIN_SUB_STRUCTURE ?>/statics/images/avatar.svg"><?= cleanString($_SESSION["firstname"]) ?> <?= cleanString($_SESSION["lastname"]) ?>
                 </span>
             <?php endif ?>
             <span>
-                <a href="<?= $linkTarget["url"] ?>"><img src="./css/<?= $linkTarget["image"] ?>"><?= $linkTarget["title"] ?></a>
+                <a href="<?= $linkTarget["url"] ?>"><img src="<?= DOMAIN_SUB_STRUCTURE ?>/statics/images/<?= $linkTarget["image"] ?>"><?= $linkTarget["title"] ?></a>
             </span>
             <span>
-                <a href="index.php?action=logout"><img src="./css/logout.svg" title="Logout" alt="Logout">Logout</a>
+                <a href="/home/logout"><img src="<?= DOMAIN_SUB_STRUCTURE ?>/statics/images/logout.svg" title="Logout" alt="Logout">Logout</a>
             </span>
         </div>
     <?php else : ?>
-        <form action="<?= $_SERVER['SCRIPT_NAME'] ?>" method="POST" class="login">
+        <form action="" method="POST" class="login">
             <input type="hidden" name="loginSent">
             <fieldset>
                 <legend>Login</legend>
@@ -115,7 +116,7 @@ if (isset($_POST["loginSent"])) {
     <?php endif ?>
 
     <div class="header-logo col-100">
-        <img src="./css/christian_sharaf.png" title="Christian Sharaf" alt="Logo for Christian Sharafs Blog">
+        <img src="<?= DOMAIN_SUB_STRUCTURE ?>/statics/images/christian_sharaf.png" title="Christian Sharaf" alt="Logo for Christian Sharafs Blog">
         <h1>My absolutely awesome Blog</h1>
     </div>
 </header>
