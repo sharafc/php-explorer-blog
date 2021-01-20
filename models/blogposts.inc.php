@@ -75,3 +75,34 @@ function getBlogpostByCategoryId($categoryId)
 
     return $blogPosts;
 }
+
+/**
+ * Undocumented function
+ *
+ * @param array $blogentry Array containing all the form values
+ * @param string|null $imagePath Path to the uploaded image or null if no image was uploaded
+ * @return integer The number of inserted datasets
+ */
+function insertBlogpost($blogentry, $imagePath){
+    global $pdo;
+
+    $sqlQuery = "INSERT INTO blogs (blog_headline, blog_imagePath, blog_imageAlignment, blog_content, cat_id, usr_id)
+                         VALUES (:ph_headline, :ph_imagepath, :ph_alignment, :ph_content, :ph_category, :ph_userid)";
+    $sqlQueryMap = [
+        "ph_headline" => $blogentry["headline"],
+        "ph_imagepath" => $imagePath,
+        "ph_alignment" => $blogentry["imageAlignment"],
+        "ph_content" => $blogentry["content"],
+        "ph_category" => $blogentry["category"],
+        "ph_userid" => cleanString($_SESSION["id"])
+    ];
+
+    $statement = $pdo->prepare($sqlQuery);
+    $statement->execute($sqlQueryMap);
+    $rowCount = $statement->rowCount();
+    if ($statement->errorInfo()[2]) {
+        logger("Error while inserting into blogs", $statement->errorInfo()[2]);
+    }
+
+    return $rowCount;
+}

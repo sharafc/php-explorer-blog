@@ -13,29 +13,13 @@ if (isset($_POST["addCategorySent"])) {
 
     // Check if category already exists
     if (!$errorMessage) {  // No errors
-        // Make sure we have a db connection
-        if (!isset($pdo)) {
-            $pdo = dbConnect();
-        }
-        $statement = $pdo->prepare("SELECT COUNT(cat_name) FROM categories WHERE cat_name = :ph_category_name");
-        $statement->execute([
-            "ph_category_name" => $formCategory
-        ]);
-        if ($statement->errorInfo()[2]) {
-            logger("Error while fetching category", $statement->errorInfo()[2]);
-        }
 
-        $count = $statement->fetchColumn();
+        $count = countCategoriesByName($formCategory);
+
         if ($count == 0) { // No entry found, save to db
-            $statement = $pdo->prepare("INSERT INTO categories (cat_name) VALUES (:ph_category_name)");
-            $statement->execute([
-                "ph_category_name" => $formCategory
-            ]);
-            if ($statement->errorInfo()[2]) {
-                logger("Error while inserting category", $statement->errorInfo()[2]);
-            }
 
-            $categoryRowCount = $statement->rowCount();
+            $categoryRowCount = insertCategoryByName($formCategory);
+
             if ($categoryRowCount) { // INSERT successfull
                 $transactionResultState = [
                     "state" => "success",
@@ -58,7 +42,7 @@ if (isset($_POST["addCategorySent"])) {
 
 // Handle add blogpost form
 if (isset($_POST["addBlogpostSent"])) {
-    logger("Blog form was sent", $_POST["category"], LOGGER_INFO, LOGGER_TYPE_CONSOLE);
+    logger("Blog form was sent", $_POST["blogentry"], LOGGER_INFO, LOGGER_TYPE_CONSOLE);
 
     // Clean post array values of potential risks
     foreach ($_POST["blogentry"] as $key => $value) {
@@ -88,29 +72,9 @@ if (isset($_POST["addBlogpostSent"])) {
         if (isset($imageUpload["error"])) { // Upload or image validation failed
             $errorImageUpload = $imageUpload["error"];
         } else { // Upload successfull or no image given -> process form
-            // Make sure we have a db connection
-            if (!isset($pdo)) {
-                $pdo = dbConnect();
-            }
 
-            $sqlQuery = "INSERT INTO blogs (blog_headline, blog_imagePath, blog_imageAlignment, blog_content, cat_id, usr_id)
-                         VALUES (:ph_headline, :ph_imagepath, :ph_alignment, :ph_content, :ph_category, :ph_userid)";
-            $sqlQueryMap = [
-                "ph_headline" => $blogentry["headline"],
-                "ph_imagepath" => ($imageUpload["path"] ?? NULL), // If upload was successfull take path otherwise NULL
-                "ph_alignment" => $blogentry["imageAlignment"],
-                "ph_content" => $blogentry["content"],
-                "ph_category" => $blogentry["category"],
-                "ph_userid" => cleanString($_SESSION["id"])
-            ];
+            $rowCount = insertBlogpost($blogentry, ($imageUpload["path"] ?? NULL));
 
-            $statement = $pdo->prepare($sqlQuery);
-            $statement->execute($sqlQueryMap);
-            if ($statement->errorInfo()[2]) {
-                logger("Error while inserting into blogs", $statement->errorInfo()[2]);
-            }
-
-            $rowCount = $statement->rowCount();
             if ($rowCount) { // INSERT successfull
                 $blogpostId = $pdo->lastInsertId();
                 logger("Blogpost saved with:", $blogpostId, LOGGER_INFO, LOGGER_TYPE_CONSOLE);

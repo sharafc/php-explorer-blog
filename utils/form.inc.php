@@ -6,7 +6,7 @@
  * @param string $stringToCheck String to check if emtpy
  * @param int $minLength (optional) minimum length of input
  * @param int $maxLength (optional) maximum length of input
- * @return string $errorMessage Errormessage to display in the form
+ * @return string|null $errorMessage Errormessage to display in the form or NULL
  */
 function checkInputString($stringToCheck, $minLength = INPUT_MIN_LENGTH, $maxLength = INPUT_MAX_LENGTH)
 {
@@ -27,7 +27,7 @@ function checkInputString($stringToCheck, $minLength = INPUT_MIN_LENGTH, $maxLen
  * Checks for a valid email adress
  *
  * @param string $email the string to check for email validity
- * @return string $errorMessage Errormessage to display in the form
+ * @return string|null $errorMessage Errormessage to display in the form or NULL
  */
 function checkEmail($email)
 {

@@ -19,9 +19,6 @@ switch ($action) {
         break;
 }
 
-// Connect to DB
-$pdo = dbConnect();
-
 // Fetch all categories for navigation
 // TODO: Try/Catch
 $categories = getAllCategories();
@@ -33,11 +30,8 @@ $categories = getAllCategories();
  */
 if (isset($categoryId)) {
     $blogPosts = getBlogpostByCategoryId($categoryId);
-    var_dump("Category", $blogPosts);
 } elseif (isset($blogpostId)) {
     $blogPosts = getBlogpostById($blogpostId);
-    var_dump("Blog ID", $blogPosts);
 } else {
     $blogPosts = getAllBlogposts($categoryId, $blogpostId);
-    var_dump("All", $blogPosts);
 }
