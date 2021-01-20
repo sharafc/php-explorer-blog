@@ -1,22 +1,16 @@
 <?php
 require_once("./config/config.inc.php");
-require_once("./config/db.inc.php");
+require_once("./config/logger_config.inc.php");
+require_once("./config/db_config.inc.php");
+require_once("./config/form_config.inc.php");
 
 require_once("./utils/logger.inc.php");
 require_once("./utils/sessions.inc.php");
+require_once("./utils/db.inc.php");
 
 require_once("./utils/form.inc.php");
 require_once("./utils/date_time.inc.php");
 require_once("./utils/upload_image.inc.php");
-
-/*
-$message = "Something went wrong while parsing, see: ";
-$data = [1,2,3,4,5];
-
-logger($message, $data);
-logger($message, $data, LOGGER_WARNING);
-logger($message, $data, LOGGER_INFO);
-*/
 ?>
 
 <!doctype html>

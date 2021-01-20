@@ -1,6 +1,9 @@
 <?php
-// Output Buffer needed because of debug messages which create whitespace and thus prevent redirecting
-ob_start();
+require_once("./models/categories.inc.php");
+require_once("./models/blogposts.inc.php");
+
+$categoryId = NULL;
+$blogpostId = NULL;
 
 // Param handling
 switch ($action) {
@@ -20,46 +23,21 @@ switch ($action) {
 $pdo = dbConnect();
 
 // Fetch all categories for navigation
-$statement = $pdo->prepare("SELECT * from categories");
-$statement->execute();
-$categories = $statement->fetchAll(PDO::FETCH_ASSOC);
-if ($statement->errorInfo()[2]) {
-    logger("Error while fetching categories", $statement->errorInfo()[2]);
-}
+// TODO: Try/Catch
+$categories = getAllCategories();
 
 /*
  * Fetch blogposts
  * -> If category is set via action, only select blogposts from this category
  * -> if blogId is set via action, only select this blogpost to display
  */
-$dbQuery = "SELECT * FROM blogs INNER JOIN users USING(usr_id) INNER JOIN categories USING(cat_id)"
-    . (isset($categoryId) ? " WHERE cat_id = :ph_categoryId" : "")
-    . (isset($blogpostId) ? " WHERE blog_id = :ph_blogId" : "")
-    . " ORDER BY blog_date DESC";
-$statement = $pdo->prepare($dbQuery);
-
-// Execute query with map, depending on selected action
 if (isset($categoryId)) {
-    $dbQueryMap = [
-        "ph_categoryId" => $categoryId
-    ];
-    $statement->execute($dbQueryMap);
+    $blogPosts = getBlogpostByCategoryId($categoryId);
+    var_dump("Category", $blogPosts);
 } elseif (isset($blogpostId)) {
-    $dbQueryMap = [
-        "ph_blogId" => $blogpostId
-    ];
-    $statement->execute($dbQueryMap);
-
-    // Fallback for navigation
-    $categoryId = NULL;
+    $blogPosts = getBlogpostById($blogpostId);
+    var_dump("Blog ID", $blogPosts);
 } else {
-    $statement->execute();
-
-    // Fallback for navigation
-    $categoryId = NULL;
-}
-
-$blogPosts = $statement->fetchAll(PDO::FETCH_ASSOC);
-if ($statement->errorInfo()[2]) {
-    logger("Error while fetching blogposts", $statement->errorInfo()[2]);
+    $blogPosts = getAllBlogposts($categoryId, $blogpostId);
+    var_dump("All", $blogPosts);
 }

@@ -1,17 +1,7 @@
 <?php
-// Output Buffer needed because of debug messages which create whitespace and thus prevent redirecting
-ob_start();
-
-// Connect to DB
-$pdo = dbConnect();
-
+require_once("./models/categories.inc.php");
 // Fetch all categories for select
-$statement = $pdo->prepare("SELECT * from categories");
-$statement->execute();
-$categories = $statement->fetchAll(PDO::FETCH_ASSOC);
-if ($statement->errorInfo()[2]) {
-    logger("Error while fetching categories", $statement->errorInfo()[2]);
-}
+$categories = getAllCategories();
 
 // Handle add category form
 if (isset($_POST["addCategorySent"])) {

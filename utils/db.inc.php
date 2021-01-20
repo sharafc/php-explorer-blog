@@ -18,3 +18,6 @@ function dbConnect($dbname = DB_NAME)
 
     return $pdo;
 }
+
+// Connect to DB
+$pdo = dbConnect();
