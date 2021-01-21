@@ -11,6 +11,8 @@ require_once("./utils/db.inc.php");
 require_once("./utils/form.inc.php");
 require_once("./utils/date_time.inc.php");
 require_once("./utils/upload_image.inc.php");
+
+require_once("./controllers/auth.php");
 ?>
 
 <!doctype html>

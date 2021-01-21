@@ -77,7 +77,7 @@ function getBlogpostByCategoryId($categoryId)
 }
 
 /**
- * Undocumented function
+ * Inserts a blogpost into the database
  *
  * @param array $blogentry Array containing all the form values
  * @param string|null $imagePath Path to the uploaded image or null if no image was uploaded

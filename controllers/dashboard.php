@@ -1,5 +1,7 @@
 <?php
 require_once("./models/categories.inc.php");
+require_once("./models/blogposts.inc.php");
+
 // Fetch all categories for select
 $categories = getAllCategories();
 
