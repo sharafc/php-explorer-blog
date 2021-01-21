@@ -1,20 +1,20 @@
 <?php
-require_once("./models/categories.inc.php");
-require_once("./models/blogposts.inc.php");
+require_once('./models/categories.inc.php');
+require_once('./models/blogposts.inc.php');
 
 $categoryId = NULL;
 $blogpostId = NULL;
 
 // Param handling
 switch ($action) {
-    case "logout":
+    case 'logout':
         session_destroy();
-        header("Location: /home");
+        header('Location: /home');
         exit; // Terminating keyword as of PSR-12
-    case "showCategory":
+    case 'showCategory':
         $categoryId = cleanString($params[0]);
         break;
-    case "showBlogpost":
+    case 'showBlogpost':
         $blogpostId = cleanString($params[0]);
         break;
 }

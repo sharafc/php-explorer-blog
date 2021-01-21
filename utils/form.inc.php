@@ -10,12 +10,12 @@
  */
 function checkInputString($stringToCheck, $minLength = INPUT_MIN_LENGTH, $maxLength = INPUT_MAX_LENGTH)
 {
-    if ($stringToCheck === "") {
-        $errorMessage = "Mandatory field";
+    if ($stringToCheck === '') {
+        $errorMessage = 'Mandatory field';
     } elseif (mb_strlen($stringToCheck) < $minLength) {
-        $errorMessage = "Please enter more than $minLength characters";
+        $errorMessage = 'Please enter more than $minLength characters';
     } elseif (mb_strlen($stringToCheck) > $maxLength) {
-        $errorMessage = "Too long. Please check your input";
+        $errorMessage = 'Too long. Please check your input';
     } else {
         $errorMessage = NULL;
     }
@@ -31,10 +31,10 @@ function checkInputString($stringToCheck, $minLength = INPUT_MIN_LENGTH, $maxLen
  */
 function checkEmail($email)
 {
-    if ($email === "") {
-        $errorMessage = "Mandatory field";
+    if ($email === '') {
+        $errorMessage = 'Mandatory field';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errorMessage = "Not a valid email adress";
+        $errorMessage = 'Not a valid email adress';
     } else {
         $errorMessage = NULL;
     }
@@ -50,6 +50,6 @@ function checkEmail($email)
  */
 function cleanString($stringToEscape)
 {
-    $escapedString = trim(htmlspecialchars($stringToEscape, ENT_QUOTES | ENT_HTML5, "utf-8", false));
+    $escapedString = trim(htmlspecialchars($stringToEscape, ENT_QUOTES | ENT_HTML5, 'utf-8', false));
     return $escapedString;
 }

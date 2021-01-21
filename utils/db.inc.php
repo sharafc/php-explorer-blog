@@ -12,7 +12,7 @@ function dbConnect($dbname = DB_NAME)
     try {
         $pdo = new PDO(DB_SYSTEM . ":host=" . DB_HOST . "; dbname=$dbname; charset=utf8mb4", DB_USER, DB_PWD);
     } catch (PDOException $error) {
-        logger("Error handling the database connection:", $error->GetMessage());
+        logger('Error handling the database connection:', $error->GetMessage());
         exit;
     }
 

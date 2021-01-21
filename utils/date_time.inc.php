@@ -12,8 +12,8 @@
  */
 function formattedDate($date)
 {
-    $dateArray = explode(" - ", date("d.m.Y - H:i:s", strtotime($date)));
-    $formattedDateString = $dateArray[0] . " at " . $dateArray[1] . " o'clock";
+    $dateArray = explode(' - ', date('d.m.Y - H:i:s', strtotime($date)));
+    $formattedDateString = $dateArray[0] . ' at ' . $dateArray[1] . ' o\'clock';
 
     return $formattedDateString;
 }

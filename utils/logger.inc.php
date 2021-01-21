@@ -18,18 +18,18 @@ function logger($message, $data = NULL, $type = LOGGER_ERROR, $logtype = LOGGER_
     $typeToLower = strtolower($type);
     $currentDate = date('Y-m-d H:i:s');
     $backtrace = debug_backtrace()[0];
-    $calledFromFile = pathinfo($backtrace["file"])["basename"];
-    $calledFromLine = $backtrace["line"];
-    $calledFunction = $backtrace["function"];
+    $calledFromFile = pathinfo($backtrace['file'])['basename'];
+    $calledFromLine = $backtrace['line'];
+    $calledFunction = $backtrace['function'];
 
     // get logtype and write into specific logfiles
     if ($logtype & LOGGER_TYPE_FILE) {
-        $logMessage = $currentDate . " | " . $type . " | " . $message . PHP_EOL;
+        $logMessage = $currentDate . ' | ' . $type . ' | ' . $message . PHP_EOL;
 
         if (!is_dir(LOGGER_FILE_PATH)) {
             mkdir(LOGGER_FILE_PATH);
         }
-        $logfile = fopen(LOGGER_FILE_PATH . date("Y-m-d") . "_" . $typeToLower . "_log.txt", "a");
+        $logfile = fopen(LOGGER_FILE_PATH . date('Y-m-d') . '_' . $typeToLower . '_log.txt', 'a');
 
         fwrite($logfile, $logMessage);
         if (isset($data)) {
@@ -40,25 +40,25 @@ function logger($message, $data = NULL, $type = LOGGER_ERROR, $logtype = LOGGER_
 
     // echo message and print out data. TODO: Make data type dependent
     if ($logtype & LOGGER_TYPE_SCREEN) {
-        echo "<div class=\"" . $typeToLower . "\">";
+        echo '<div class="' . $typeToLower . '">';
         echo '<time datetime="' . $currentDate . '">' . $currentDate . '</time>';
-        echo $message . "<br>";
-        echo "<pre>Called from " . $calledFromFile . " on line " . $calledFromLine . "<br>\r\n";
+        echo $message . '<br>';
+        echo '<pre>Called from ' . $calledFromFile . ' on line ' . $calledFromLine . '<br>\r\n';
         if (isset($data)) {
-            echo print_r($data, true) . "<br>";
+            echo print_r($data, true) . '<br>';
         }
-        echo "</pre>";
+        echo '</pre>';
         echo '</div>';
     }
 
     // jsonify data and write to console.log/info/error
     if ($logtype & LOGGER_TYPE_CONSOLE) {
-        echo "<script>";
-        echo "console." . $typeToLower . "(\"Called from " . $calledFromFile . " on line " . $calledFromLine . "\");";
-        echo "console." . $typeToLower . "(\"" . $message . " \");";
+        echo '<script>';
+        echo 'console.' . $typeToLower . '(\'Called from ' . $calledFromFile . ' on line ' . $calledFromLine . '\');';
+        echo 'console.' . $typeToLower . '(\'' . $message . ' \');';
         if (isset($data)) {
-            echo "console." . $typeToLower . "(" . json_encode($data, JSON_HEX_TAG) . ");";
+            echo 'console.' . $typeToLower . '(' . json_encode($data, JSON_HEX_TAG) . ');';
         }
-        echo "</script>";
+        echo '</script>';
     }
 }

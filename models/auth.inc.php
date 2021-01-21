@@ -9,15 +9,15 @@
 function getUserByMail($mail){
     global $pdo;
 
-    $statement = $pdo->prepare("SELECT * FROM users WHERE usr_email = :ph_usr_email");
+    $statement = $pdo->prepare('SELECT * FROM users WHERE usr_email = :ph_usr_email');
     $statement->execute([
-        "ph_usr_email" => $mail
+        'ph_usr_email' => $mail
     ]);
 
     // Get first data row, false if no entry was found
     $user = $statement->fetch(PDO::FETCH_ASSOC);
     if ($statement->errorInfo()[2]) {
-        logger("Error while fetching category", $statement->errorInfo()[2]);
+        logger('Error while fetching category', $statement->errorInfo()[2]);
     }
 
     return $user;

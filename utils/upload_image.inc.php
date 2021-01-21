@@ -14,8 +14,8 @@
  * @param int (optional) $imageMaxSize the maximum allowed filesize. Defaults to IMAGE_MAX_SIZE
  * @return array processedImagePath Array containing the processed imagePath and the error message if applicable
  * [
- *      "path" => (string) $fileTargetPath,
- *      "error" => (string) $errorMessage
+ *      'path' => (string) $fileTargetPath,
+ *      'error' => (string) $errorMessage
  * ]
  */
 function uploadImage(
@@ -29,26 +29,26 @@ function uploadImage(
     $allowedMimeTypes = IMAGE_ALLOWED_MIMETYPES;
 
     // Map temporary upload path, filename and size
-    $fileTempPath = $image["tmp_name"];
-    $fileNameOriginal = cleanString($image["name"]);
+    $fileTempPath = $image['tmp_name'];
+    $fileNameOriginal = cleanString($image['name']);
     $fileSize = $image['size'];
 
     // Extracting file name and type
     $fileInfo = pathinfo($fileNameOriginal);
-    $fileType = $fileInfo["extension"];
-    $fileNameQualified = $fileInfo["filename"];
+    $fileType = $fileInfo['extension'];
+    $fileNameQualified = $fileInfo['filename'];
 
-    // Sanitize and convert to "server safe" file name
-    $fileNameQualified = str_replace(" ", "_", $fileNameQualified);
+    // Sanitize and convert to 'server safe' file name
+    $fileNameQualified = str_replace(' ', '_', $fileNameQualified);
     $fileNameQualified = mb_strtolower($fileNameQualified);
-    $fileNameQualified = str_replace(array("ä", "ö", "ü", "ß"), array("ae", "oe", "ue", "ss"), $fileNameQualified);
-    $fileNameQualified = preg_replace('/[^a-z0-9_-]/', "", $fileNameQualified);
+    $fileNameQualified = str_replace(array('ä', 'ö', 'ü', 'ß'), array('ae', 'oe', 'ue', 'ss'), $fileNameQualified);
+    $fileNameQualified = preg_replace('/[^a-z0-9_-]/', '', $fileNameQualified);
 
     // Create random prefix to really have a unique filename
-    $fileNamePrefix = rand(1, 999999) . str_shuffle("abcdefghijklmnopqrstuvwxyz") . time();
+    $fileNamePrefix = rand(1, 999999) . str_shuffle('abcdefghijklmnopqrstuvwxyz') . time();
 
     // Concatinate all info to one file path
-    $fileTargetPath = $uploadPath . DIRECTORY_SEPARATOR . $fileNamePrefix . "_" . $fileNameQualified . DELIMITER_FILE . $fileType;
+    $fileTargetPath = $uploadPath . DIRECTORY_SEPARATOR . $fileNamePrefix . '_' . $fileNameQualified . DELIMITER_FILE . $fileType;
 
     // Validate image dimensions, size and allowed mimetypes
     $imageData = getimagesize($fileTempPath);
@@ -57,13 +57,13 @@ function uploadImage(
     $imageMimeType = $imageData['mime'];
 
     if (!in_array($imageMimeType, $allowedMimeTypes)) { // Check for allowed mime types
-        $errorMessage = "Not an allowed Mime type";
+        $errorMessage = 'Not an allowed Mime type';
     } elseif ($imageHeight > $imageMaxHeight) { // Check for allowed image height
-        $errorMessage = "Image height exceeds the allowed height of $imageMaxHeight pixel";
+        $errorMessage = 'Image height exceeds the allowed height of $imageMaxHeight pixel';
     } elseif ($imageWidth > $imageMaxWidth) { // Check for allowed image width
-        $errorMessage = "Image width exceeds the allowed width of $imageMaxWidth pixel";
+        $errorMessage = 'Image width exceeds the allowed width of $imageMaxWidth pixel';
     } elseif ($fileSize > $imageMaxSize) { // Check for allowed file size
-        $errorMessage = "File size exceeds the allowd size of " . round($imageMaxSize / 1024, 2) . "kB";
+        $errorMessage = 'File size exceeds the allowd size of ' . round($imageMaxSize / 1024, 2) . 'kB';
     } else { // No errors
         $errorMessage = NULL;
     }
@@ -72,7 +72,7 @@ function uploadImage(
     if (!$errorMessage) {
         // Save image to disk
         if (!@move_uploaded_file($fileTempPath, $fileTargetPath)) {
-            logger("Error while moving file from $fileTempPath to $fileTargetPath.");
+            logger('Error while moving file from $fileTempPath to $fileTargetPath.');
 
             $fileTargetPath = NULL;
         }
@@ -81,5 +81,5 @@ function uploadImage(
         $fileTargetPath = NULL;
     }
 
-    return array("path" => $fileTargetPath, "error" => $errorMessage);
+    return array('path' => $fileTargetPath, 'error' => $errorMessage);
 }

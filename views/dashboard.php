@@ -1,8 +1,8 @@
 <main>
     <!-- General transaction feedback -->
     <?php if (isset($transactionResultState)) : ?>
-        <div class="<?= $transactionResultState["state"] ?> col-100">
-            <?= $transactionResultState["message"] ?>
+        <div class="<?= $transactionResultState['state'] ?> col-100">
+            <?= $transactionResultState['message'] ?>
         </div>
     <?php endif ?>
 
@@ -13,15 +13,15 @@
             <legend>Add blog entry</legend>
 
             <label for="headline">Headline</label>
-            <?php if (isset($error["headline"])) : ?>
-                <div class="error"><?= $error["headline"] ?></div>
+            <?php if (isset($error['headline'])) : ?>
+                <div class="error"><?= $error['headline'] ?></div>
             <?php endif ?>
-            <input type="text" name="blogentry[headline]" id="headline" value="<?= $blogentry["headline"] ?? "" ?>">
+            <input type="text" name="blogentry[headline]" id="headline" value="<?= $blogentry['headline'] ?? '' ?>">
 
             <label for="category">Category</label>
             <select name="blogentry[category]" id="category">
                 <?php foreach ($categories as $category) : ?>
-                    <option value="<?= $category["cat_id"] ?>"><?= $category["cat_name"] ?></option>
+                    <option value="<?= $category['cat_id'] ?>"><?= $category['cat_name'] ?></option>
                 <?php endforeach ?>
             </select>
 
@@ -38,10 +38,10 @@
             </div>
 
             <label for="content">Content</label>
-            <?php if (isset($error["content"])) : ?>
-                <div class="error"><?= $error["content"] ?></div>
+            <?php if (isset($error['content'])) : ?>
+                <div class="error"><?= $error['content'] ?></div>
             <?php endif ?>
-            <textarea name="blogentry[content]" id="content" cols="30" rows="10"><?= $blogentry["content"] ?? "" ?></textarea>
+            <textarea name="blogentry[content]" id="content" cols="30" rows="10"><?= $blogentry['content'] ?? '' ?></textarea>
 
             <button type="submit">Add blog entry</button>
         </fieldset>
@@ -56,7 +56,7 @@
                 <div class="error"><?= $errorMessage ?></div>
             <?php endif ?>
             <label for="category">Category name</label>
-            <input type="text" name="category" id="category" value="<?= $formCategory ?? "" ?>">
+            <input type="text" name="category" id="category" value="<?= $formCategory ?? '' ?>">
             <button type="submit">Add category</button>
         </fieldset>
     </form>

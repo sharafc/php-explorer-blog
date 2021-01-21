@@ -8,13 +8,13 @@
 function getAllBlogposts() {
     global $pdo;
 
-    $dbQuery = "SELECT * FROM blogs
+    $dbQuery = 'SELECT * FROM blogs
                 INNER JOIN users USING(usr_id) INNER JOIN categories USING(cat_id)
-                ORDER BY blog_date DESC";
+                ORDER BY blog_date DESC';
     $statement = $pdo->prepare($dbQuery);
     $statement->execute();
     if ($statement->errorInfo()[2]) {
-        logger("Error while fetching blogposts", $statement->errorInfo()[2]);
+        logger('Error while fetching blogposts', $statement->errorInfo()[2]);
     }
 
     $blogPosts = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -31,12 +31,12 @@ function getAllBlogposts() {
 function getBlogpostById($blogpostId) {
     global $pdo;
 
-    $dbQuery = "SELECT * FROM blogs
+    $dbQuery = 'SELECT * FROM blogs
                 INNER JOIN users USING(usr_id) INNER JOIN categories USING(cat_id)
-                WHERE blog_id = :ph_blogId";
+                WHERE blog_id = :ph_blogId';
     $statement = $pdo->prepare($dbQuery);
     $dbQueryMap = [
-        "ph_blogId" => $blogpostId
+        'ph_blogId' => $blogpostId
     ];
     $statement->execute($dbQueryMap);
     if ($statement->errorInfo()[2]) {
@@ -58,13 +58,13 @@ function getBlogpostByCategoryId($categoryId)
 {
     global $pdo;
 
-    $dbQuery = "SELECT * FROM blogs
+    $dbQuery = 'SELECT * FROM blogs
                 INNER JOIN users USING(usr_id) INNER JOIN categories USING(cat_id)
                 WHERE cat_id = :ph_categoryId
-                ORDER BY blog_date DESC";
+                ORDER BY blog_date DESC';
     $statement = $pdo->prepare($dbQuery);
     $dbQueryMap = [
-        "ph_categoryId" => $categoryId
+        'ph_categoryId' => $categoryId
     ];
     $statement->execute($dbQueryMap);
     if ($statement->errorInfo()[2]) {
@@ -86,22 +86,22 @@ function getBlogpostByCategoryId($categoryId)
 function insertBlogpost($blogentry, $imagePath){
     global $pdo;
 
-    $sqlQuery = "INSERT INTO blogs (blog_headline, blog_imagePath, blog_imageAlignment, blog_content, cat_id, usr_id)
-                         VALUES (:ph_headline, :ph_imagepath, :ph_alignment, :ph_content, :ph_category, :ph_userid)";
+    $sqlQuery = 'INSERT INTO blogs (blog_headline, blog_imagePath, blog_imageAlignment, blog_content, cat_id, usr_id)
+                 VALUES (:ph_headline, :ph_imagepath, :ph_alignment, :ph_content, :ph_category, :ph_userid)';
     $sqlQueryMap = [
-        "ph_headline" => $blogentry["headline"],
-        "ph_imagepath" => $imagePath,
-        "ph_alignment" => $blogentry["imageAlignment"],
-        "ph_content" => $blogentry["content"],
-        "ph_category" => $blogentry["category"],
-        "ph_userid" => cleanString($_SESSION["id"])
+        'ph_headline' => $blogentry['headline'],
+        'ph_imagepath' => $imagePath,
+        'ph_alignment' => $blogentry['imageAlignment'],
+        'ph_content' => $blogentry['content'],
+        'ph_category' => $blogentry['category'],
+        'ph_userid' => cleanString($_SESSION['id'])
     ];
 
     $statement = $pdo->prepare($sqlQuery);
     $statement->execute($sqlQueryMap);
     $rowCount = $statement->rowCount();
     if ($statement->errorInfo()[2]) {
-        logger("Error while inserting into blogs", $statement->errorInfo()[2]);
+        logger('Error while inserting into blogs', $statement->errorInfo()[2]);
     }
 
     return $rowCount;
