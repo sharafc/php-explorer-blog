@@ -1,0 +1,13 @@
+<?php
+
+/* Errors */
+define("LOGGER_FILE_PATH", "logs" . DIRECTORY_SEPARATOR);
+define("LOGGER_INFO", "INFO");
+define("LOGGER_WARNING", "WARN");
+define("LOGGER_ERROR", "ERROR");
+
+define("LOGGER_TYPE_OFF", 0);
+define("LOGGER_TYPE_FILE", 1);
+define("LOGGER_TYPE_SCREEN", 2);
+define("LOGGER_TYPE_CONSOLE", 4);
+define("LOGGER_TYPE_DEFAULT", LOGGER_TYPE_FILE | LOGGER_TYPE_CONSOLE);

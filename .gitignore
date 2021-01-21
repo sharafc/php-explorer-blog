@@ -7,6 +7,7 @@
 /build
 /skeletons
 /images/avatars
+/logs
 
 # misc
 .DS_Store
@@ -14,6 +15,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
+blog.zip
 
 # IDE
 .vscode/*

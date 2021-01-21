@@ -24,10 +24,6 @@ function uploadImage(
     $imageMaxWidth = IMAGE_MAX_WIDTH,
     $imageMaxSize = IMAGE_MAX_SIZE
 ) {
-    if (DEBUG_F) {
-        echo "<p class='debugImageUpload'><b>Line " . __LINE__ . "</b>: Call of " . __FUNCTION__ . "() <i>(" . basename(__FILE__) . ")</i></p>\n";
-    }
-
     // Constants mapping and initialization
     $uploadPath = IMAGE_UPLOADPATH;
     $allowedMimeTypes = IMAGE_ALLOWED_MIMETYPES;
@@ -52,24 +48,13 @@ function uploadImage(
     $fileNamePrefix = rand(1, 999999) . str_shuffle("abcdefghijklmnopqrstuvwxyz") . time();
 
     // Concatinate all info to one file path
-    $fileTargetPath = $uploadPath . DELIMITER_PATH . $fileNamePrefix . "_" . $fileNameQualified . DELIMITER_FILE . $fileType;
-    if (DEBUG_F) {
-        echo "<p class='debugImageUpload'><b>Line " . __LINE__ . "</b>: \$fileSize: " . round($fileSize / 1024, 2) . "kB <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-        echo "<p class='debugImageUpload'><b>Line " . __LINE__ . "</b>: \$fileTempPath: $fileTempPath <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-        echo "<p class='debugImageUpload'><b>Line " . __LINE__ . "</b>: \$fileNameQualified: $fileNameQualified <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-        echo "<p class='debugImageUpload'><b>Line " . __LINE__ . "</b>: \$fileTargetPath: $fileTargetPath <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-    }
+    $fileTargetPath = $uploadPath . DIRECTORY_SEPARATOR . $fileNamePrefix . "_" . $fileNameQualified . DELIMITER_FILE . $fileType;
 
     // Validate image dimensions, size and allowed mimetypes
     $imageData = getimagesize($fileTempPath);
     $imageWidth = $imageData[0];
     $imageHeight = $imageData[1];
     $imageMimeType = $imageData['mime'];
-    if (DEBUG_F) {
-        echo "<p class='debugImageUpload'><b>Line " . __LINE__ . "</b>: \$imageWidth: $imageWidth px <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-        echo "<p class='debugImageUpload'><b>Line " . __LINE__ . "</b>: \$imageHeight: $imageHeight px <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-        echo "<p class='debugImageUpload'><b>Line " . __LINE__ . "</b>: \$imageMimeType: $imageMimeType <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-    }
 
     if (!in_array($imageMimeType, $allowedMimeTypes)) { // Check for allowed mime types
         $errorMessage = "Not an allowed Mime type";
@@ -85,25 +70,14 @@ function uploadImage(
 
     // Move file and validate save
     if (!$errorMessage) {
-        if (DEBUG_F) {
-            echo "<p class='debugImageUpload ok'><b>Line " . __LINE__ . "</b>: No errors in image validation... <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-        }
-
         // Save image to disk
         if (!@move_uploaded_file($fileTempPath, $fileTargetPath)) {
-            if (DEBUG_F) {
-                echo "<p class='debugImageUpload err'><b>Line " . __LINE__ . "</b>: Error while moving file from <i>'$fileTempPath'</i> to <i>'$fileTargetPath'</i>! <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-            }
+            logger("Error while moving file from $fileTempPath to $fileTargetPath.");
+
             $fileTargetPath = NULL;
-        } else {
-            if (DEBUG_F) {
-                echo "<p class='debugImageUpload ok'><b>Line " . __LINE__ . "</b>: Successfully moved file from <i>'$fileTempPath'</i> to <i>'$fileTargetPath'</i>. <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-            }
         }
     } else {
-        if (DEBUG_F) {
-            echo "<p class='debugImageUpload err'><b>Line " . __LINE__ . "</b>: $errorMessage <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-        }
+        // User needs to reselect image since the given one didn't comply
         $fileTargetPath = NULL;
     }
 

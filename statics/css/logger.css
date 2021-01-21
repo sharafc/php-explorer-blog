@@ -1,0 +1,24 @@
+.error,
+.info,
+.warn {
+    border: 1px dashed;
+    border-radius: 5px;
+    margin: 0.25em;
+    padding: 0.25em;
+}
+
+.error {
+    border-color: red;
+}
+
+.info {
+    border-color: blue;
+}
+
+.warn {
+    border-color: darkorange;
+}
+
+time {
+    display: block;
+}
