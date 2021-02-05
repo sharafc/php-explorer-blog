@@ -43,7 +43,7 @@ if (isset($_POST["loginSent"])) {
             $pdo = dbConnect();
         }
 
-        $statement = $pdo->prepare("SELECT * FROM users WHERE usr_email = :ph_usr_email");
+        $statement = $pdo->prepare("SELECT * FROM user WHERE usr_email = :ph_usr_email");
         $statement->execute([
             "ph_usr_email" => $login["useremail"]
         ]);
