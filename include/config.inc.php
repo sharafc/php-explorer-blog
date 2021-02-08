@@ -4,7 +4,7 @@ define('DELIMITER_PATH', '/');
 define('DELIMITER_FILE', '.');
 
 /* Debugging switches */
-define('DEBUG', true);          // Debugging for main document
+define('DEBUG', false);          // Debugging for main document
 define('DEBUG_F', false);        // Debugging for functions
 define('DEBUG_ARRAY', false);    // Debugging for arrays
 define('DEBUG_DB', false);       // Debugging for database
@@ -39,4 +39,4 @@ define('LOGGER_TYPE_OFF', 0);
 define('LOGGER_TYPE_FILE', 1);
 define('LOGGER_TYPE_SCREEN', 2);
 define('LOGGER_TYPE_CONSOLE', 4);
-define('LOGGER_TYPE_DEFAULT', LOGGER_TYPE_FILE | LOGGER_TYPE_CONSOLE);
+define('LOGGER_TYPE_DEFAULT', LOGGER_TYPE_FILE | LOGGER_TYPE_CONSOLE | LOGGER_TYPE_SCREEN);

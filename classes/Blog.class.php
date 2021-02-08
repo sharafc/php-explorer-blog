@@ -11,17 +11,111 @@ class Blog implements BlogInterface
     private Category $category;
     private User $user;
 
-    public function __construct()
+    public function __construct($headline, $content, $category, $user, $alignment, $path, $date, $id)
     {
-
+        $this->setBlog_headline($headline);
+        $this->setBlog_content($content);
+        $this->setCategory($category);
+        $this->setUser($user);
+        $this->setBlog_imageAlignment($alignment);
+        $this->setBlog_imagePath($path);
+        $this->setBlog_date($date);
+        $this->setBlog_id($id);
     }
 
-    public static function fetchPostsFromDb(PDO $pdo, $categoryId = NULL) {
+    /**
+     * Undocumented function
+     *
+     * @param PDO $pdo
+     * @param [type] $categoryId
+     * @return void
+     */
+    public static function fetchPostsFromDb(PDO $pdo, $categoryId = NULL, $blogpostId = NULL)
+    {
+        /*
+        * Fetch blogposts
+        * -> If category is set via action, only select blogposts from this category
+        * -> if blogId is set via action, only select this blogpost to display
+        */
+        $query = 'SELECT * FROM blog
+                  INNER JOIN user USING(usr_id)
+                  INNER JOIN category USING(cat_id)'
+                  . (isset($categoryId) ? ' WHERE cat_id = :ph_categoryId' : '')
+                  . (isset($blogpostId) ? ' WHERE blog_id = :ph_blogId' : '')
+                  . ' ORDER BY blog_date DESC';
+        $statement = $pdo->prepare($query);
 
+        // Execute query with map, depending on selected action
+        if (isset($categoryId)) {
+            $map = [
+                'ph_categoryId' => $categoryId
+            ];
+            $statement->execute($map);
+            if ($statement->errorInfo()[2]) {
+                logger('Could not fetch blogposts with Category ID ' . $categoryId . ' from database', $statement->errorInfo()[2]);
+            }
+        } elseif (isset($blogpostId)) {
+            $map = [
+                'ph_blogId' => $blogpostId
+            ];
+            $statement->execute($map);
+            if ($statement->errorInfo()[2]) {
+                logger('Could not fetch blogpost with blogpost ID ' . $blogpostId . ' from database', $statement->errorInfo()[2]);
+            }
+        } else {
+            $statement->execute();
+            if ($statement->errorInfo()[2]) {
+                logger('Could not fetch blogposts from database', $statement->errorInfo()[2]);
+            }
+        }
+
+        while ($result = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $blogPosts[] = new Blog(
+                $result['blog_headline'],
+                $result['blog_content'],
+                new Category($result['cat_id'], $result['cat_name']),
+                new User($result['usr_firstname'], $result['usr_lastname'], $result['usr_email'], $result['usr_password'],  $result['usr_city'], $result['usr_id']),
+                $result['blog_imageAlignment'],
+                $result['blog_imagePath'],
+                $result['blog_date'],
+                $result['blog_id']
+            );
+        }
+
+        return $blogPosts;
     }
 
-    public function savePostToDb(PDO $pdo) {
+    /**
+     * Undocumented function
+     *
+     * @param PDO $pdo
+     * @return void
+     */
+    public function savePostToDb(PDO $pdo)
+    {
+        $query = 'INSERT INTO blog (blog_headline, blog_imagePath, blog_imageAlignment, blog_content, cat_id, usr_id)
+                  VALUES (:ph_headline, :ph_imagepath, :ph_alignment, :ph_content, :ph_category, :ph_userid)';
+        $map = [
+            'ph_headline' => $this->getBlog_headline(),
+            'ph_imagepath' => $this->getBlog_imagePath(),
+            'ph_alignment' => $this->getBlog_imageAlignment(),
+            'ph_content' => $this->getBlog_content(),
+            'ph_category' => $this->getCategory()->getCat_id(),
+            'ph_userid' => $this->getUser()->getUsr_id()
+        ];
 
+        $statement = $pdo->prepare($query);
+        $statement->execute($map);
+        if ($statement->errorInfo()[2]) {
+            logger('Could not execute category check', $statement->errorInfo()[2]);
+        }
+
+        $rowCount = $statement->rowCount();
+        if ($rowCount) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

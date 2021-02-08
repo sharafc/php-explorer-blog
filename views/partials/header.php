@@ -1,6 +1,6 @@
 <?php
 // Decide with page to link to in meta header, sadly str_contains only works in PHP8
-if (strpos($_SERVER['SCRIPT_NAME'], "dashboard.php") !== false) {
+if (strpos($_SERVER['SCRIPT_NAME'], 'dashboard.php') !== false) {
     $linkTarget = [
         "url" => "index.php",
         "image" => "home.svg",
@@ -30,18 +30,8 @@ if (isset($_POST["loginSent"])) {
     // Remove whitespaces and empty values from error array
     $errorMap = array_map('trim', $error);
     $errorMap = array_filter($errorMap);
-    if (DEBUG_ARRAY) {
-        echo "<pre class='debug'>Line <b>" . __LINE__ . "</b> <i>(" . basename(__FILE__) . ")</i>:<br>\r\n";
-        print_r($errorMap);
-        print_r($login);
-        echo "</pre>";
-    }
 
     if (count($errorMap) === 0) {
-        // Make sure we have a db connection
-        if (!isset($pdo)) {
-            $pdo = dbConnect();
-        }
 
         $statement = $pdo->prepare("SELECT * FROM user WHERE usr_email = :ph_usr_email");
         $statement->execute([
@@ -116,6 +106,6 @@ if (isset($_POST["loginSent"])) {
 
     <div class="header-logo col-100">
         <img src="./css/christian_sharaf.png" title="Christian Sharaf" alt="Logo for Christian Sharafs Blog">
-        <h1>My absolutely awesome Blog</h1>
+        <h1>My absolutely awesome and updated Blog</h1>
     </div>
 </header>

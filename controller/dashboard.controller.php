@@ -1,43 +1,25 @@
 <?php
+require_once('./classes/CategoryInterface.class.php');
+require_once('./classes/Category.class.php');
+require_once('./classes/UserInterface.class.php');
+require_once('./classes/User.class.php');
+require_once('./classes/BlogInterface.class.php');
+require_once('./classes/Blog.class.php');
 
-// Fetch all categories for select
-$statement = $pdo->prepare("SELECT * from category");
-$statement->execute();
-$categories = $statement->fetchAll(PDO::FETCH_ASSOC);
-if (DEBUG) {
-    echo "<p class='debugDb'><b>Line " . __LINE__ . ":</b> Fetching categories for select options... <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-}
-if (DEBUG_DB) {
-    if ($statement->errorInfo()[2]) {
-        echo "<p class='debug err'><b>Line " . __LINE__ . "</b>: " . $statement->errorInfo()[2] . " <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-    }
-}
-if (DEBUG_ARRAY) {
-    echo "<pre class='debug'>Line <b>" . __LINE__ . "</b> <i>(" . basename(__FILE__) . ")</i>:<br>\r\n";
-    print_r($categories);
-    echo "</pre>";
-}
+// Fetch all categories for navigation
+$categories = Category::fetchAllFromDb($pdo);
 
 // Handle add category form
 if (isset($_POST["addCategorySent"])) {
-    if (DEBUG) {
-        echo "<p class='debug'><b>Line " . __LINE__ . "</b>: Category form was send... <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-    }
-
     // Escape field value and check for validity
     $formCategory = cleanString($_POST["category"]);
     $errorMessage = checkInputString($formCategory);
 
-    // Check if category already exists
-    if (!$errorMessage) {  // No errors
-        if (DEBUG) {
-            echo "<p class='debug ok'><b>Line " . __LINE__ . "</b>: Category form is valid <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-        }
 
-        // Make sure we have a db connection
-        if (!isset($pdo)) {
-            $pdo = dbConnect();
-        }
+    if (!$errorMessage) {  // No errors
+
+        // Check if category already exists
+
         $statement = $pdo->prepare("SELECT COUNT(cat_name) FROM category WHERE cat_name = :ph_category_name");
         $statement->execute([
             "ph_category_name" => $formCategory

@@ -15,8 +15,14 @@ class User implements UserInterface
     private $usr_city;
     private $usr_password;
 
-    public function __construct()
+    public function __construct($firstname, $lastname, $email, $password, $city, $id)
     {
+        $this->setUsr_firstname($firstname);
+        $this->setUsr_lastname($lastname);
+        $this->setUsr_email($email);
+        $this->setUsr_password($password);
+        $this->setUsr_city($city);
+        $this->setUsr_id($id);
     }
 
     /**

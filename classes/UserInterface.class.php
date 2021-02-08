@@ -7,7 +7,7 @@
  */
 interface UserInterface
 {
-    public function __construct();
+    public function __construct($firstname, $lastname, $email, $password, $city, $id);
 
     public function fetchFromDB(PDO $pdo);
 

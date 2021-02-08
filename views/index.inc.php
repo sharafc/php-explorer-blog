@@ -9,18 +9,8 @@
 </head>
 
 <body>
-    <?php include_once("./views/partials/header.php") ?>
-
-    <nav>
-        <span><a href="index.php" class="<?= !$categoryId ? "active" : ""  ?>">Home</a></span>
-        <?php if ($categories) : ?>
-            <?php foreach ($categories as $category) : ?>
-                <span>
-                    <a href="?action=showCategory&id=<?= $category["cat_id"] ?>" class="<?= $category["cat_id"] == $categoryId ? "active" : ""  ?>"><?= $category["cat_name"] ?></a>
-                </span>
-            <?php endforeach ?>
-        <?php endif ?>
-    </nav>
+    <?php require_once('./views/partials/header.php') ?>
+    <?php require_once('./views/partials/navigation.php') ?>
 
     <main>
         <?php if ($blogPosts) : ?>
@@ -35,7 +25,7 @@
         <?php endif ?>
     </main>
 
-    <?php include_once("./views/partials/footer.php") ?>
+    <?php require_once('./views/partials/footer.php') ?>
 </body>
 
 </html>

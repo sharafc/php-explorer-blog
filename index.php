@@ -12,6 +12,9 @@ ob_start();
 session_name('blog');
 session_start();
 
+$categoryId = NULL;
+$blogpostId = NULL;
+
 // Param handling
 if (isset($_GET['action'])) {
     $action = cleanString($_GET['action']);
