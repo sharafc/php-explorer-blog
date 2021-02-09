@@ -33,7 +33,7 @@ class User implements UserInterface
      * Fetch a user from the database and populate the object with the fetched data
      *
      * @param PDO $pdo
-     * @return User $user The user object populated with data from the database
+     * @return User|NULL $user The user object populated with data from the database or NULL if no user was found
      */
     public function fetchFromDB(PDO $pdo)
     {
@@ -49,14 +49,17 @@ class User implements UserInterface
             logger('Could not fetch User from database', $statement->errorInfo()[2]);
         }
 
-        $user = new User(
-            $result['usr_firstname'],
-            $result['usr_lastname'],
-            $result['usr_email'],
-            $result['usr_password'],
-            $result['usr_city'],
-            $result['usr_id']
-        );
+        // Initialise emmpty User to fill or returnas empty object
+        $user = new User();
+
+        if ($result) {
+            $user->setUsr_firstname($result['usr_firstname']);
+            $user->setUsr_lastname($result['usr_lastname']);
+            $user->setUsr_email($result['usr_email']);
+            $user->setUsr_password($result['usr_password']);
+            $user->setUsr_city($result['usr_city']);
+            $user->setUsr_id($result['usr_id']);
+        }
 
         return $user;
     }

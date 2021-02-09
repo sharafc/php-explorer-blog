@@ -4,10 +4,10 @@ define('DELIMITER_PATH', '/');
 define('DELIMITER_FILE', '.');
 
 /* Debugging switches */
-define('DEBUG', false);          // Debugging for main document
-define('DEBUG_F', false);        // Debugging for functions
-define('DEBUG_ARRAY', false);    // Debugging for arrays
-define('DEBUG_DB', false);       // Debugging for database
+define('DEBUG', true);          // Debugging for main document
+define('DEBUG_F', true);        // Debugging for functions
+define('DEBUG_ARRAY', true);    // Debugging for arrays
+define('DEBUG_DB', true);       // Debugging for database
 
 /* Database options */
 define('DB_SYSTEM', 'mysql');

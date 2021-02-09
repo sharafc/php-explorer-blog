@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Describes a blogpost
  */
@@ -26,5 +27,4 @@ interface BlogInterface
     public function setCategory(Category $category);
     public function getUser();
     public function setUser(User $user);
-
 }

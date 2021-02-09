@@ -59,7 +59,7 @@ class Blog implements BlogInterface
         /*
         * Build sql query
         * -> If category is set via action, only select blogposts from this category
-        * -> if blogId is set via action, only select this blogpost to display
+        * -> if blogId is set via action, only select given blogpost to display
         */
         $query = 'SELECT * FROM blog
                   INNER JOIN user USING(usr_id)
@@ -92,6 +92,8 @@ class Blog implements BlogInterface
                 logger('Could not fetch blogposts from database', $statement->errorInfo()[2]);
             }
         }
+
+        $blogPosts = [];
 
         while ($result = $statement->fetch(PDO::FETCH_ASSOC)) {
             $blogPosts[] = new Blog(

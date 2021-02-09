@@ -37,10 +37,11 @@ class Category implements CategoryInterface
     {
         $statement = $pdo->prepare('SELECT * from category');
         $statement->execute();
-
         if ($statement->errorInfo()[2]) {
             logger('Could not fetch categories from database', $statement->errorInfo()[2]);
         }
+
+        $categories = [];
 
         while ($result = $statement->fetch(PDO::FETCH_ASSOC)) {
             $categories[] = new Category(

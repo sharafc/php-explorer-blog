@@ -8,6 +8,7 @@ interface CategoryInterface
     public function __construct($id, $name);
 
     public static function fetchAllFromDb(PDO $pdo);
+
     public function saveCategoryToDb(PDO $pdo);
     public function checkIfCategoryExists(PDO $pdo);
 

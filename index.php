@@ -2,9 +2,10 @@
 
 /**
  * Something like a router
+ * Sets up configuration and helper functions
  * Delegates to index controller
  *
- * @file Router to index controller
+ * @file "Router" to index controller
  * @author Christian Sharaf
  * @copyright 2021 Christian Sharaf
  * @version 1.0.0
@@ -21,6 +22,7 @@ require_once('./include/sessionHandler.inc.php');
 // Output Buffer needed because of debug messages which create whitespace and thus prevent redirecting
 ob_start();
 
+// Helper variables for controlling display of blogpost(s)
 $categoryId = NULL;
 $blogpostId = NULL;
 

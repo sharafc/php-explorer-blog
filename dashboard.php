@@ -1,9 +1,11 @@
 <?php
+
 /**
  * Something like a router
+ * Sets up configuration and helper functions
  * Delegates to dashboard controller
  *
- * @file Router to dashboard controller
+ * @file "Router" to dashboard controller
  * @author Christian Sharaf
  * @copyright 2021 Christian Sharaf
  * @version 1.0.0
