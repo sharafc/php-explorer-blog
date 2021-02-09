@@ -24,7 +24,7 @@
 </head>
 
 <body>
-    <?php require_once('./views/partials/header.php') ?>
+    <?php require_once('./views/partials/header.inc.php') ?>
 
     <main>
         <!-- General transaction feedback -->
@@ -35,13 +35,13 @@
         <?php endif ?>
 
         <!-- Blogpost form -->
-        <?php require_once('./views/partials/addBlogpost.php'); ?>
+        <?php require_once('./views/partials/addBlogpost.inc.php'); ?>
 
         <!-- Category form -->
-        <?php require_once('./views/partials/addCategory.php'); ?>
+        <?php require_once('./views/partials/addCategory.inc.php'); ?>
     </main>
 
-    <?php require_once('./views/partials/footer.php') ?>
+    <?php require_once('./views/partials/footer.inc.php') ?>
 </body>
 
 </html>

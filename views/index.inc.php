@@ -26,14 +26,14 @@
 </head>
 
 <body>
-    <?php require_once('./views/partials/header.php') ?>
-    <?php require_once('./views/partials/navigation.php') ?>
+    <?php require_once('./views/partials/header.inc.php') ?>
+    <?php require_once('./views/partials/navigation.inc.php') ?>
 
     <main>
         <?php if ($blogPosts) : ?>
             <?php foreach ($blogPosts as $blogPost) : ?>
                 <!-- Blog post -->
-                <?php require('./views/partials/blogpost.php') ?>
+                <?php require('./views/partials/blogpost.inc.php') ?>
             <?php endforeach ?>
         <?php else : ?>
             <article>
@@ -42,7 +42,7 @@
         <?php endif ?>
     </main>
 
-    <?php require_once('./views/partials/footer.php') ?>
+    <?php require_once('./views/partials/footer.inc.php') ?>
 </body>
 
 </html>
