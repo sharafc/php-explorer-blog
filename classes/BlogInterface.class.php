@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Describes a blogpost
+ */
 interface BlogInterface
 {
     public function __construct($headline, $content, $category, $user, $alignment, $path, $date, $id);

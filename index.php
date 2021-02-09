@@ -1,16 +1,25 @@
 <?php
+
+/**
+ * Something like a router
+ * Delegates to index controller
+ *
+ * @file Router to index controller
+ * @author Christian Sharaf
+ * @copyright 2021 Christian Sharaf
+ * @version 1.0.0
+ */
 require_once('./include/config.inc.php');
 require_once('./include/db.inc.php');
 require_once('./include/logger.inc.php');
 require_once('./include/form.inc.php');
 require_once('./include/dateTime.inc.php');
 
+// Call Session Handling
+require_once('./include/sessionHandler.inc.php');
+
 // Output Buffer needed because of debug messages which create whitespace and thus prevent redirecting
 ob_start();
-
-// Session handling
-session_name('blog');
-session_start();
 
 $categoryId = NULL;
 $blogpostId = NULL;
@@ -36,5 +45,5 @@ if (isset($_GET['action'])) {
 // Connect to DB
 $pdo = dbConnect();
 
-// Call Controller
+// Call Index Controller
 require_once('./controller/index.controller.php');

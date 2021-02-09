@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * Represents a blogpost with all its entities.
+ * Needs a Category and User class
+ *
+ * @implements BlogInterface
+ *
+ * @author Christian Sharaf
+ * @copyright 2021 Christian Sharaf
+ * @version 1.0.0
+ */
 class Blog implements BlogInterface
 {
     private $blog_id;
@@ -11,7 +21,19 @@ class Blog implements BlogInterface
     private Category $category;
     private User $user;
 
-    public function __construct($headline, $content, $category, $user, $alignment, $path, $date, $id)
+    /**
+     * @construct
+     *
+     * @param string $headline Headline of the blogpost
+     * @param string $content Content of the blogpost
+     * @param Category $category The category the blogpost belongs to
+     * @param User $user The user who wrote the blogpost
+     * @param string $alignment The alignment of the image
+     * @param string $path The path to the image
+     * @param string $date The creation date of the blogpost
+     * @param string $id The blogpost id
+     */
+    public function __construct($headline = NULL, $content = NULL, $category = NULL, $user = NULL, $alignment = NULL, $path = NULL, $date = NULL, $id = NULL)
     {
         $this->setBlog_headline($headline);
         $this->setBlog_content($content);
@@ -24,28 +46,30 @@ class Blog implements BlogInterface
     }
 
     /**
-     * Undocumented function
+     * Fetches blogposts from the database. With the optional parameters you are able to
+     * either fetch only posts by category or a single post by id
      *
-     * @param PDO $pdo
-     * @param [type] $categoryId
-     * @return void
+     * @param PDO $pdo The PHP database object
+     * @param integer (optional) $categoryId The category to select from
+     * @param integer (optional) $blogpostId The blogpost id to fetch
+     * @return array $blogPosts Array containing Blog objects which represent our blogposts
      */
     public static function fetchPostsFromDb(PDO $pdo, $categoryId = NULL, $blogpostId = NULL)
     {
         /*
-        * Fetch blogposts
+        * Build sql query
         * -> If category is set via action, only select blogposts from this category
         * -> if blogId is set via action, only select this blogpost to display
         */
         $query = 'SELECT * FROM blog
                   INNER JOIN user USING(usr_id)
                   INNER JOIN category USING(cat_id)'
-                  . (isset($categoryId) ? ' WHERE cat_id = :ph_categoryId' : '')
-                  . (isset($blogpostId) ? ' WHERE blog_id = :ph_blogId' : '')
-                  . ' ORDER BY blog_date DESC';
+            . (isset($categoryId) ? ' WHERE cat_id = :ph_categoryId' : '')
+            . (isset($blogpostId) ? ' WHERE blog_id = :ph_blogId' : '')
+            . ' ORDER BY blog_date DESC';
         $statement = $pdo->prepare($query);
 
-        // Execute query with map, depending on selected action
+        // Execute query with map, depending on given parameters
         if (isset($categoryId)) {
             $map = [
                 'ph_categoryId' => $categoryId
@@ -86,10 +110,10 @@ class Blog implements BlogInterface
     }
 
     /**
-     * Undocumented function
+     * Save a blogpost to the database
      *
-     * @param PDO $pdo
-     * @return void
+     * @param PDO $pdo The PHP database object
+     * @return bool True when saving was successful, otherwise false
      */
     public function savePostToDb(PDO $pdo)
     {
@@ -107,11 +131,15 @@ class Blog implements BlogInterface
         $statement = $pdo->prepare($query);
         $statement->execute($map);
         if ($statement->errorInfo()[2]) {
-            logger('Could not execute category check', $statement->errorInfo()[2]);
+            logger('Could not save blogpost to database', $statement->errorInfo()[2]);
         }
 
         $rowCount = $statement->rowCount();
         if ($rowCount) {
+            $lastInsertId = $pdo->lastInsertId();
+            $this->setBlog_id($lastInsertId);
+            logger('Saving successful. Blogpost saved with ID: ', $lastInsertId, LOGGER_INFO);
+
             return true;
         }
 
@@ -128,14 +156,10 @@ class Blog implements BlogInterface
 
     /**
      * Set the value of blog_id
-     *
-     * @return  self
      */
     public function setBlog_id($blog_id)
     {
         $this->blog_id = $blog_id;
-
-        return $this;
     }
 
     /**
@@ -148,14 +172,10 @@ class Blog implements BlogInterface
 
     /**
      * Set the value of blog_headline
-     *
-     * @return  self
      */
     public function setBlog_headline($blog_headline)
     {
         $this->blog_headline = $blog_headline;
-
-        return $this;
     }
 
     /**
@@ -168,14 +188,10 @@ class Blog implements BlogInterface
 
     /**
      * Set the value of blog_content
-     *
-     * @return  self
      */
     public function setBlog_content($blog_content)
     {
         $this->blog_content = $blog_content;
-
-        return $this;
     }
 
     /**
@@ -188,14 +204,10 @@ class Blog implements BlogInterface
 
     /**
      * Set the value of blog_date
-     *
-     * @return  self
      */
     public function setBlog_date($blog_date)
     {
         $this->blog_date = $blog_date;
-
-        return $this;
     }
 
     /**
@@ -208,14 +220,10 @@ class Blog implements BlogInterface
 
     /**
      * Set the value of blog_imageAlignment
-     *
-     * @return  self
      */
     public function setBlog_imageAlignment($blog_imageAlignment)
     {
         $this->blog_imageAlignment = $blog_imageAlignment;
-
-        return $this;
     }
 
     /**
@@ -228,14 +236,10 @@ class Blog implements BlogInterface
 
     /**
      * Set the value of blog_imagePath
-     *
-     * @return  self
      */
     public function setBlog_imagePath($blog_imagePath)
     {
         $this->blog_imagePath = $blog_imagePath;
-
-        return $this;
     }
 
     /**
@@ -248,14 +252,10 @@ class Blog implements BlogInterface
 
     /**
      * Set the value of category
-     *
-     * @return  self
      */
     public function setCategory(Category $category)
     {
         $this->category = $category;
-
-        return $this;
     }
 
     /**
@@ -268,13 +268,9 @@ class Blog implements BlogInterface
 
     /**
      * Set the value of user
-     *
-     * @return  self
      */
     public function setUser(User $user)
     {
         $this->user = $user;
-
-        return $this;
     }
 }

@@ -2,29 +2,29 @@
 // Decide with page to link to in meta header, sadly str_contains only works in PHP8
 if (strpos($_SERVER['SCRIPT_NAME'], 'dashboard.php') !== false) {
     $linkTarget = [
-        "url" => "index.php",
-        "image" => "home.svg",
-        "title" => "Home"
+        'url' => 'index.php',
+        'image' => 'home.svg',
+        'title' => 'Home'
 
     ];
 } else {
     $linkTarget = [
-        "url" => "dashboard.php",
-        "image" => "dashboard.svg",
-        "title" => "Dashboard"
+        'url' => 'dashboard.php',
+        'image' => 'dashboard.svg',
+        'title' => 'Dashboard'
     ];
 }
 
 // Handle login and check if account is correct
-if (isset($_POST["loginSent"])) {
+if (isset($_POST['loginSent'])) {
 
-    foreach ($_POST["login"] as $key => $value) {
+    foreach ($_POST['login'] as $key => $value) {
         $login[$key] = cleanString($value);
     }
 
     $error = [
-        "useremail" => checkEmail($login["useremail"]),
-        "password" => checkInputString($login["password"], 4)
+        'useremail' => checkEmail($login['useremail']),
+        'password' => checkInputString($login['password'], 4)
     ];
 
     // Remove whitespaces and empty values from error array
@@ -33,55 +33,39 @@ if (isset($_POST["loginSent"])) {
 
     if (count($errorMap) === 0) {
 
-        $statement = $pdo->prepare("SELECT * FROM user WHERE usr_email = :ph_usr_email");
-        $statement->execute([
-            "ph_usr_email" => $login["useremail"]
-        ]);
+        $currentUser = new User();
+        $currentUser->setUsr_email($login['useremail']);
+        $currentUser = $currentUser->fetchFromDB($pdo);
 
-        // Get first data row, false if no entry was found
-        $user = $statement->fetch(PDO::FETCH_ASSOC);
-        if (DEBUG_DB) {
-            if ($statement->errorInfo()[2]) {
-                echo "<p class='debug err'><b>Line " . __LINE__ . "</b>: " . $statement->errorInfo()[2] . " <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-            }
-        }
-        if (DEBUG_ARRAY) {
-            echo "<pre class='debug'>Line <b>" . __LINE__ . "</b> <i>(" . basename(__FILE__) . ")</i>:<br>\r\n";
-            print_r($user);
-            echo "</pre>";
-        }
-        if ($user) {
-            if (password_verify($login["password"], $user["usr_password"])) {
-                if (DEBUG) {
-                    echo "<p class='debugDb'><b>Line " . __LINE__ . ":</b> Credentials correct, redirect to Dashboard... <i>(" . basename(__FILE__) . ")</i></p>\r\n";
-                }
+        if ($currentUser->getUsr_password()) {
+            if (password_verify($login['password'], $currentUser->getUsr_password())) {
 
                 // Add values to session and redirect to dashboard
-                $_SESSION["id"] = $user["usr_id"];
-                $_SESSION["firstname"] = $user["usr_firstname"];
-                $_SESSION["lastname"] = $user["usr_lastname"];
-                header("Location: dashboard.php");
+                $_SESSION['id'] = $currentUser->getUsr_id();
+                $_SESSION['firstname'] = $currentUser->getUsr_firstname();
+                $_SESSION['lastname'] = $currentUser->getUsr_lastname();
+                header('Location: dashboard.php');
                 exit;
             } else { // Passwords do not match
-                $errorLogin = "Login credentials incorrect.";
+                $errorLogin = 'Login credentials incorrect.';
             }
         }
     } else { // Error occured in loginform
-        $errorLogin = "Login credentials incorrect.";
+        $errorLogin = 'Login credentials incorrect.';
     }
 }
 ?>
 <header>
     <!-- "Profile" links or login form -->
-    <?php if (isset($_SESSION["id"])) : ?>
+    <?php if (isset($_SESSION['id'])) : ?>
         <div class="header-meta">
-            <?php if (isset($_SESSION["firstname"]) && isset($_SESSION["lastname"])) : ?>
+            <?php if (isset($_SESSION['firstname']) && isset($_SESSION['lastname'])) : ?>
                 <span>
-                    <img src="./css/avatar.svg"><?= cleanString($_SESSION["firstname"]) ?> <?= cleanString($_SESSION["lastname"]) ?>
+                    <img src="./css/avatar.svg"><?= cleanString($_SESSION['firstname']) ?> <?= cleanString($_SESSION['lastname']) ?>
                 </span>
             <?php endif ?>
             <span>
-                <a href="<?= $linkTarget["url"] ?>"><img src="./css/<?= $linkTarget["image"] ?>"><?= $linkTarget["title"] ?></a>
+                <a href="<?= $linkTarget['url'] ?>"><img src="./css/<?= $linkTarget['image'] ?>"><?= $linkTarget['title'] ?></a>
             </span>
             <span>
                 <a href="index.php?action=logout"><img src="./css/logout.svg" title="Logout" alt="Logout">Logout</a>

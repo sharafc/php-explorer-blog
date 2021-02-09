@@ -1,9 +1,7 @@
 <?php
 
 /**
- * User interface
- *
- * @interface
+ * Describes a user
  */
 interface UserInterface
 {

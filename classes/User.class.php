@@ -1,13 +1,17 @@
 <?php
 
 /**
- * User object
+ * Represents a User with all its entities
+ * A User is needed to log in and create blogposts
  *
- * @class
+ * @implements UserInterface
+ *
+ * @author Christian Sharaf
+ * @copyright 2021 Christian Sharaf
+ * @version 1.0.0
  */
 class User implements UserInterface
 {
-
     private $usr_id;
     private $usr_firstname;
     private $usr_lastname;
@@ -15,7 +19,7 @@ class User implements UserInterface
     private $usr_city;
     private $usr_password;
 
-    public function __construct($firstname, $lastname, $email, $password, $city, $id)
+    public function __construct($firstname = NULL, $lastname = NULL, $email = NULL, $password = NULL, $city = NULL, $id = NULL)
     {
         $this->setUsr_firstname($firstname);
         $this->setUsr_lastname($lastname);
@@ -40,10 +44,19 @@ class User implements UserInterface
         $statement = $pdo->prepare($query);
         $statement->execute($map);
 
-        $user = $statement->fetch(PDO::FETCH_ASSOC);
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
         if ($statement->errorInfo()[2]) {
             logger('Could not fetch User from database', $statement->errorInfo()[2]);
         }
+
+        $user = new User(
+            $result['usr_firstname'],
+            $result['usr_lastname'],
+            $result['usr_email'],
+            $result['usr_password'],
+            $result['usr_city'],
+            $result['usr_id']
+        );
 
         return $user;
     }
@@ -58,14 +71,10 @@ class User implements UserInterface
 
     /**
      * Set the value of usr_id
-     *
-     * @return  self
      */
     public function setUsr_id($usr_id)
     {
         $this->usr_id = $usr_id;
-
-        return $this;
     }
 
     /**
@@ -78,14 +87,10 @@ class User implements UserInterface
 
     /**
      * Set the value of usr_firstname
-     *
-     * @return  self
      */
     public function setUsr_firstname($usr_firstname)
     {
         $this->usr_firstname = $usr_firstname;
-
-        return $this;
     }
 
     /**
@@ -98,14 +103,10 @@ class User implements UserInterface
 
     /**
      * Set the value of usr_lastname
-     *
-     * @return  self
      */
     public function setUsr_lastname($usr_lastname)
     {
         $this->usr_lastname = $usr_lastname;
-
-        return $this;
     }
 
     /**
@@ -118,14 +119,10 @@ class User implements UserInterface
 
     /**
      * Set the value of usr_email
-     *
-     * @return  self
      */
     public function setUsr_email($usr_email)
     {
         $this->usr_email = $usr_email;
-
-        return $this;
     }
 
     /**
@@ -138,14 +135,10 @@ class User implements UserInterface
 
     /**
      * Set the value of usr_city
-     *
-     * @return  self
      */
     public function setUsr_city($usr_city)
     {
         $this->usr_city = $usr_city;
-
-        return $this;
     }
 
     /**
@@ -158,13 +151,9 @@ class User implements UserInterface
 
     /**
      * Set the value of usr_password
-     *
-     * @return  self
      */
     public function setUsr_password($usr_password)
     {
         $this->usr_password = $usr_password;
-
-        return $this;
     }
 }

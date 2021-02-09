@@ -1,8 +1,7 @@
 <?php
 
 /**
- * Undocumented interface
- * @interface
+ * Describes a category
  */
 interface CategoryInterface
 {

@@ -1,3 +1,20 @@
+<?php
+
+/**
+ * Basic view for Index
+ * Is called by Index Controller
+ * Aggregates needed partials:
+ *      - Header
+ *      - Navigation
+ *      - Blogpost
+ *      - Footer
+ *
+ * @file View for Index-Page
+ * @author Christian Sharaf
+ * @copyright 2021 Christian Sharaf
+ * @version 1.0.0
+ */
+?>
 <!doctype html>
 <html>
 

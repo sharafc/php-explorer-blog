@@ -1,3 +1,18 @@
+<?php
+/**
+ * Basic view for Dashboard
+ * Is called by Dashboard Controller
+ * Aggregates needed partials:
+ *      - Header
+ *      - addBlogpost and addCategory forms
+ *      - Footer
+ *
+ * @file View for Dashboard-Page
+ * @author Christian Sharaf
+ * @copyright 2021 Christian Sharaf
+ * @version 1.0.0
+ */
+?>
 <!doctype html>
 <html>
 

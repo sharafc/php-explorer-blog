@@ -1,24 +1,37 @@
 <?php
 
 /**
- * Undocumented class
+ * Represents a blogposts Category with all its entities
+ * Is also used to build up navigation items.
+ *
+ * @implements CategoryInterface
+ *
+ * @author Christian Sharaf
+ * @copyright 2021 Christian Sharaf
+ * @version 1.0.0
  */
 class Category implements CategoryInterface
 {
     private $cat_id;
     private $cat_name;
 
-    public function __construct($id, $name)
+    /**
+     * @construct
+     *
+     * @param integer $id The category id
+     * @param string $name The name of the category
+     */
+    public function __construct($id = NULL, $name = NULL)
     {
         $this->setCat_id($id);
         $this->setCat_name($name);
     }
 
     /**
-     * Undocumented function
+     * Fetches categories from the database.
      *
-     * @param PDO $pdo
-     * @return array
+     * @param PDO $pdo The PHP database object
+     * @return array $categories Array containing Category objects which represent our categories
      */
     public static function fetchAllFromDb(PDO $pdo)
     {
@@ -40,33 +53,40 @@ class Category implements CategoryInterface
     }
 
     /**
-     * Undocumented function
+     * Save a category to the database
      *
-     * @param PDO $pdo
-     * @return void
+     * @param PDO $pdo The PHP database object
+     * @return bool True when saving was successful, otherwise false
      */
     public function saveCategoryToDb(PDO $pdo)
     {
         $statement = $pdo->prepare('INSERT INTO category (cat_name) VALUES (:ph_category_name)');
+
         $statement->execute([
-            'ph_category_name' => $this->getcat_name()
+            'ph_category_name' => $this->getCat_name()
         ]);
+
         if ($statement->errorInfo()[2]) {
-            logger('Could not save category ' . $this->getcat_name() . ' to database', $statement->errorInfo()[2]);
+            logger('Could not save category ' . $this->getCat_name() . ' to database', $statement->errorInfo()[2]);
         }
 
-        $categoryRowCount = $statement->rowCount();
-        if ($categoryRowCount) {
+        $rowCount = $statement->rowCount();
+        if ($rowCount) {
+            $lastInsertId = $pdo->lastInsertId();
+            $this->setCat_id($lastInsertId);
+            logger('Saving successful. Category saved with ID: ', $lastInsertId, LOGGER_INFO);
+
             return true;
         }
+
         return false;
     }
 
     /**
-     * Undocumented function
+     * Check if a category already exists in the database
      *
-     * @param PDO $pdo
-     * @return void
+     * @param PDO $pdo The PHP database object
+     * @return bool True when category exists, otherwise false
      */
     public function checkIfCategoryExists(PDO $pdo)
     {
@@ -85,7 +105,6 @@ class Category implements CategoryInterface
         return false;
     }
 
-
     /**
      * Get the value of cat_id
      */
@@ -96,14 +115,10 @@ class Category implements CategoryInterface
 
     /**
      * Set the value of cat_id
-     *
-     * @return  self
      */
     public function setCat_id($cat_id)
     {
         $this->cat_id = $cat_id;
-
-        return $this;
     }
 
     /**
@@ -116,13 +131,9 @@ class Category implements CategoryInterface
 
     /**
      * Set the value of cat_name
-     *
-     * @return  self
      */
     public function setCat_name($cat_name)
     {
         $this->cat_name = $cat_name;
-
-        return $this;
     }
 }

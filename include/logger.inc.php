@@ -42,8 +42,8 @@ function logger($message, $data = NULL, $type = LOGGER_ERROR, $logtype = LOGGER_
     if ($logtype & LOGGER_TYPE_SCREEN) {
         echo "<div class=\"" . $typeToLower . "\">";
         echo '<time datetime="' . $currentDate . '">' . $currentDate . ':&nbsp;</time>';
-        echo $message . "<br>";
         echo "<pre>Called from " . $calledFromFile . " on line " . $calledFromLine . "<br>\r\n";
+        echo $message . "<br>";
         if (isset($data)) {
             echo print_r($data, true) . "<br>";
         }
