@@ -1,11 +1,10 @@
 <?php
-// Decide with page to link to in meta header, sadly str_contains only works in PHP8
+// Decide which page to link to in meta header, sadly str_contains only works in PHP8
 if (strpos($_SERVER['SCRIPT_NAME'], 'dashboard.php') !== false) {
     $linkTarget = [
         'url' => 'index.php',
         'image' => 'home.svg',
         'title' => 'Home'
-
     ];
 } else {
     $linkTarget = [

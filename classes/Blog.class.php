@@ -64,9 +64,9 @@ class Blog implements BlogInterface
         $query = 'SELECT * FROM blog
                   INNER JOIN user USING(usr_id)
                   INNER JOIN category USING(cat_id)'
-            . (isset($categoryId) ? ' WHERE cat_id = :ph_categoryId' : '')
-            . (isset($blogpostId) ? ' WHERE blog_id = :ph_blogId' : '')
-            . ' ORDER BY blog_date DESC';
+                  . (isset($categoryId) ? ' WHERE cat_id = :ph_categoryId' : '')
+                  . (isset($blogpostId) ? ' WHERE blog_id = :ph_blogId' : '')
+                  . ' ORDER BY blog_date DESC';
         $statement = $pdo->prepare($query);
 
         // Execute query with map, depending on given parameters

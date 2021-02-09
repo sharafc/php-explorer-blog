@@ -18,7 +18,6 @@ require_once('./classes/Blog.class.php');
 
 // Handle login and check if account is correct
 if (isset($_POST['loginSent'])) {
-
     foreach ($_POST['login'] as $key => $value) {
         $login[$key] = cleanString($value);
     }
@@ -36,13 +35,13 @@ if (isset($_POST['loginSent'])) {
         // Initialise empty User, assign email to it and fill it up with data from the database
         $currentUser = new User();
         $currentUser->setUsr_email($login['useremail']);
-        $currentUser = $currentUser->fetchFromDB($pdo);
+        $currentUser->fetchFromDB($pdo);
 
-        // Store password since it is reused and enables easier check
-        $password  = $currentUser->getUsr_password();
+        // Store passwordHash since it is reused and enables easier check
+        $passwordHash = $currentUser->getUsr_password();
 
-        if ($password) {
-            if (password_verify($login['password'], $password)) {
+        if ($passwordHash) {
+            if (password_verify($login['password'], $passwordHash)) {
                 // Add values to session and redirect to dashboard
                 $_SESSION['id'] = $currentUser->getUsr_id();
                 $_SESSION['firstname'] = $currentUser->getUsr_firstname();
@@ -52,7 +51,7 @@ if (isset($_POST['loginSent'])) {
             } else { // Passwords do not match
                 $errorLogin = 'Login credentials incorrect.';
             }
-        } else { // No User with password found
+        } else { // No User with passwordHash found
             $errorLogin = 'Login credentials incorrect.';
         }
     } else { // Error occured in loginform

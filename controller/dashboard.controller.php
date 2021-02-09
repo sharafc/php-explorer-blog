@@ -79,7 +79,6 @@ if (isset($_POST['addBlogpostSent'])) {
         if (isset($imageUpload['error'])) { // Upload or image validation failed
             $errorImageUpload = $imageUpload['error'];
         } else { // Upload successfull or no image given -> process form
-
             $currentUser = new User();
             $currentUser->setUsr_id(cleanString($_SESSION["id"]));
 
@@ -90,13 +89,13 @@ if (isset($_POST['addBlogpostSent'])) {
                 new Category($blogentry['category']),
                 $currentUser,
                 $blogentry['imageAlignment'],
-                $imageUpload['path']
+                (is_null($imageUpload) ? NULL : $imageUpload['path'])
             );
 
             if ($newBlogpost->savePostToDb($pdo)) { // INSERT successfull
                 $transactionResultState = [
                     'state' => 'success',
-                    'message' => 'Blogpost with ID ' . $newBlogpost->getBlog_id() . 'saved to database.'
+                    'message' => 'Blogpost with ID ' . $newBlogpost->getBlog_id() . ' saved to database.'
                 ];
 
                 // Clear form fields

@@ -32,12 +32,13 @@ class User implements UserInterface
     /**
      * Fetch a user from the database and populate the object with the fetched data
      *
-     * @param PDO $pdo
-     * @return User|NULL $user The user object populated with data from the database or NULL if no user was found
+     * @param PDO $pdo The PHP database object
+     * @return void
      */
     public function fetchFromDB(PDO $pdo)
     {
-        $query = 'SELECT * FROM user WHERE usr_email = :ph_usr_email';
+        $query = 'SELECT * FROM user
+                  WHERE usr_email = :ph_usr_email';
         $map = [
             'ph_usr_email' => $this->getUsr_email()
         ];
@@ -49,19 +50,14 @@ class User implements UserInterface
             logger('Could not fetch User from database', $statement->errorInfo()[2]);
         }
 
-        // Initialise emmpty User to fill or returnas empty object
-        $user = new User();
-
         if ($result) {
-            $user->setUsr_firstname($result['usr_firstname']);
-            $user->setUsr_lastname($result['usr_lastname']);
-            $user->setUsr_email($result['usr_email']);
-            $user->setUsr_password($result['usr_password']);
-            $user->setUsr_city($result['usr_city']);
-            $user->setUsr_id($result['usr_id']);
+            $this->setUsr_firstname($result['usr_firstname']);
+            $this->setUsr_lastname($result['usr_lastname']);
+            $this->setUsr_email($result['usr_email']);
+            $this->setUsr_password($result['usr_password']);
+            $this->setUsr_city($result['usr_city']);
+            $this->setUsr_id($result['usr_id']);
         }
-
-        return $user;
     }
 
     /**

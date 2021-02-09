@@ -7,7 +7,7 @@ interface BlogInterface
 {
     public function __construct($headline, $content, $category, $user, $alignment, $path, $date, $id);
 
-    public static function fetchPostsFromDb(PDO $pdo, $categoryId = NULL);
+    public static function fetchPostsFromDb(PDO $pdo, $categoryId, $blogpostId);
 
     public function savePostToDb(PDO $pdo);
 

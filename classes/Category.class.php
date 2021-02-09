@@ -61,12 +61,13 @@ class Category implements CategoryInterface
      */
     public function saveCategoryToDb(PDO $pdo)
     {
-        $statement = $pdo->prepare('INSERT INTO category (cat_name) VALUES (:ph_category_name)');
-
-        $statement->execute([
+        $query = 'INSERT INTO category (cat_name)
+                  VALUES (:ph_category_name)';
+        $map = [
             'ph_category_name' => $this->getCat_name()
-        ]);
-
+        ];
+        $statement = $pdo->prepare($query);
+        $statement->execute($map);
         if ($statement->errorInfo()[2]) {
             logger('Could not save category ' . $this->getCat_name() . ' to database', $statement->errorInfo()[2]);
         }
@@ -91,16 +92,19 @@ class Category implements CategoryInterface
      */
     public function checkIfCategoryExists(PDO $pdo)
     {
-        $statement = $pdo->prepare('SELECT COUNT(cat_name) FROM category WHERE cat_name = :ph_category_name');
-        $statement->execute([
+        $query = 'SELECT COUNT(cat_name) FROM category
+                  WHERE cat_name = :ph_category_name';
+        $map = [
             'ph_category_name' => $this->getcat_name()
-        ]);
+        ];
+        $statement = $pdo->prepare($query);
+        $statement->execute($map);
         $count = $statement->fetchColumn();
         if ($statement->errorInfo()[2]) {
             logger('Could not execute category check', $statement->errorInfo()[2]);
         }
 
-        if ($count) {
+        if ($count != false) {
             return true;
         }
         return false;
