@@ -25,6 +25,10 @@ class Category implements CategoryInterface
     {
         $this->setCat_id($id);
         $this->setCat_name($name);
+
+        if (DEBUG_CC) {
+            echo "<h3 class='debugClass hint'><b>Line " . __LINE__ .  "</b>: Call of " . __METHOD__ . "()  (<i>" . basename(__FILE__) . "</i>)</h3>\r\n";
+        }
     }
 
     /**
@@ -35,10 +39,17 @@ class Category implements CategoryInterface
      */
     public static function fetchAllFromDb(PDO $pdo)
     {
+        if (DEBUG_C) {
+            echo "<h3 class='debugClass'><b>Line  " . __LINE__ .  "</b>: Call to " . __METHOD__ . "() (<i>" . basename(__FILE__) . "</i>)</h3>\r\n";
+        }
+
         $statement = $pdo->prepare('SELECT * from category');
         $statement->execute();
         if ($statement->errorInfo()[2]) {
             logger('Could not fetch categories from database', $statement->errorInfo()[2]);
+            if (DEBUG_DB) {
+                echo "<p class='debug err'><b>Line " . __LINE__ . "</b>: " . $statement->errorInfo()[2] . " <i>(" . basename(__FILE__) . ")</i></p>\r\n";
+            }
         }
 
         $categories = [];
@@ -61,6 +72,10 @@ class Category implements CategoryInterface
      */
     public function saveCategoryToDb(PDO $pdo)
     {
+        if (DEBUG_C) {
+            echo "<h3 class='debugClass'><b>Line  " . __LINE__ .  "</b>: Call to " . __METHOD__ . "() (<i>" . basename(__FILE__) . "</i>)</h3>\r\n";
+        }
+
         $query = 'INSERT INTO category (cat_name)
                   VALUES (:ph_category_name)';
         $map = [
@@ -70,6 +85,9 @@ class Category implements CategoryInterface
         $statement->execute($map);
         if ($statement->errorInfo()[2]) {
             logger('Could not save category ' . $this->getCat_name() . ' to database', $statement->errorInfo()[2]);
+            if (DEBUG_DB) {
+                echo "<p class='debug err'><b>Line " . __LINE__ . "</b>: " . $statement->errorInfo()[2] . " <i>(" . basename(__FILE__) . ")</i></p>\r\n";
+            }
         }
 
         $rowCount = $statement->rowCount();
@@ -92,6 +110,10 @@ class Category implements CategoryInterface
      */
     public function checkIfCategoryExists(PDO $pdo)
     {
+        if (DEBUG_C) {
+            echo "<h3 class='debugClass'><b>Line  " . __LINE__ .  "</b>: Call to " . __METHOD__ . "() (<i>" . basename(__FILE__) . "</i>)</h3>\r\n";
+        }
+
         $query = 'SELECT COUNT(cat_name) FROM category
                   WHERE cat_name = :ph_category_name';
         $map = [
@@ -102,6 +124,9 @@ class Category implements CategoryInterface
         $count = $statement->fetchColumn();
         if ($statement->errorInfo()[2]) {
             logger('Could not execute category check', $statement->errorInfo()[2]);
+            if (DEBUG_DB) {
+                echo "<p class='debug err'><b>Line " . __LINE__ . "</b>: " . $statement->errorInfo()[2] . " <i>(" . basename(__FILE__) . ")</i></p>\r\n";
+            }
         }
 
         if ($count != false) {

@@ -18,6 +18,10 @@ require_once('./classes/Blog.class.php');
 
 // Handle login and check if account is correct
 if (isset($_POST['loginSent'])) {
+    if (DEBUG) {
+        echo "<p class='debug'><b>Line " . __LINE__ . "</b>: Login form was send... <i>(" . basename(__FILE__) . ")</i></p>\r\n";
+    }
+
     foreach ($_POST['login'] as $key => $value) {
         $login[$key] = cleanString($value);
     }
@@ -42,6 +46,9 @@ if (isset($_POST['loginSent'])) {
 
         if ($passwordHash) {
             if (password_verify($login['password'], $passwordHash)) {
+                if (DEBUG) {
+                    echo "<p class='debugDb'><b>Line " . __LINE__ . ":</b> Credentials correct, redirect to Dashboard... <i>(" . basename(__FILE__) . ")</i></p>\r\n";
+                }
                 // Add values to session and redirect to dashboard
                 $_SESSION['id'] = $currentUser->getUsr_id();
                 $_SESSION['firstname'] = $currentUser->getUsr_firstname();
@@ -61,9 +68,25 @@ if (isset($_POST['loginSent'])) {
 
 // Fetch all categories for navigation
 $categories = Category::fetchAllFromDb($pdo);
+if (DEBUG) {
+    echo "<p class='debugDb'><b>Line " . __LINE__ . ":</b> Fetching categories for navigation... <i>(" . basename(__FILE__) . ")</i></p>\r\n";
+}
+if (DEBUG_ARRAY) {
+    echo "<pre class='debug'>Line <b>" . __LINE__ . "</b> <i>(" . basename(__FILE__) . ")</i>:<br>\r\n";
+    print_r($categories);
+    echo "</pre>";
+}
 
 // Fetch all blogposts
 $blogPosts = Blog::fetchPostsFromDb($pdo, $categoryId, $blogpostId);
+if (DEBUG) {
+    echo "<p class='debugDb'><b>Line " . __LINE__ . ":</b> Fetching blog posts... <i>(" . basename(__FILE__) . ")</i></p>\r\n";
+}
+if (DEBUG_ARRAY) {
+    echo "<pre class='debug'>Line <b>" . __LINE__ . "</b> <i>(" . basename(__FILE__) . ")</i>:<br>\r\n";
+    print_r($blogPosts);
+    echo "</pre>";
+}
 
 // Delegate view
 require_once('./views/index.inc.php');

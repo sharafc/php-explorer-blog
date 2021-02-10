@@ -43,6 +43,10 @@ class Blog implements BlogInterface
         $this->setBlog_imagePath($path);
         $this->setBlog_date($date);
         $this->setBlog_id($id);
+
+        if (DEBUG_CC) {
+            echo "<h3 class='debugClass hint'><b>Line " . __LINE__ .  "</b>: Call of " . __METHOD__ . "()  (<i>" . basename(__FILE__) . "</i>)</h3>\r\n";
+        }
     }
 
     /**
@@ -56,6 +60,10 @@ class Blog implements BlogInterface
      */
     public static function fetchPostsFromDb(PDO $pdo, $categoryId = NULL, $blogpostId = NULL)
     {
+        if (DEBUG_C) {
+            echo "<h3 class='debugClass'><b>Line  " . __LINE__ .  "</b>: Call to " . __METHOD__ . "() (<i>" . basename(__FILE__) . "</i>)</h3>\r\n";
+        }
+
         /*
         * Build sql query
         * -> If category is set via action, only select blogposts from this category
@@ -68,7 +76,6 @@ class Blog implements BlogInterface
                   . (isset($blogpostId) ? ' WHERE blog_id = :ph_blogId' : '')
                   . ' ORDER BY blog_date DESC';
         $statement = $pdo->prepare($query);
-
         // Execute query with map, depending on given parameters
         if (isset($categoryId)) {
             $map = [
@@ -77,6 +84,12 @@ class Blog implements BlogInterface
             $statement->execute($map);
             if ($statement->errorInfo()[2]) {
                 logger('Could not fetch blogposts with Category ID ' . $categoryId . ' from database', $statement->errorInfo()[2]);
+                if (DEBUG_DB) {
+                    echo "<p class='debug err'><b>Line " . __LINE__ . "</b>: " . $statement->errorInfo()[2] . " <i>(" . basename(__FILE__) . ")</i></p>\r\n";
+                }
+            }
+            if (DEBUG) {
+                echo "<p class='debugDb'><b>Line " . __LINE__ . ":</b> Fetching blogposts with category $categoryId... <i>(" . basename(__FILE__) . ")</i></p>\r\n";
             }
         } elseif (isset($blogpostId)) {
             $map = [
@@ -85,11 +98,23 @@ class Blog implements BlogInterface
             $statement->execute($map);
             if ($statement->errorInfo()[2]) {
                 logger('Could not fetch blogpost with blogpost ID ' . $blogpostId . ' from database', $statement->errorInfo()[2]);
+                if (DEBUG_DB) {
+                    echo "<p class='debug err'><b>Line " . __LINE__ . "</b>: " . $statement->errorInfo()[2] . " <i>(" . basename(__FILE__) . ")</i></p>\r\n";
+                }
+            }
+            if (DEBUG) {
+                echo "<p class='debugDb'><b>Line " . __LINE__ . ":</b> Fetching blogpost with id $blogpostId... <i>(" . basename(__FILE__) . ")</i></p>\r\n";
             }
         } else {
             $statement->execute();
             if ($statement->errorInfo()[2]) {
                 logger('Could not fetch blogposts from database', $statement->errorInfo()[2]);
+                if (DEBUG_DB) {
+                    echo "<p class='debug err'><b>Line " . __LINE__ . "</b>: " . $statement->errorInfo()[2] . " <i>(" . basename(__FILE__) . ")</i></p>\r\n";
+                }
+            }
+            if (DEBUG) {
+                echo "<p class='debugDb'><b>Line " . __LINE__ . ":</b> Fetching all blogposts ... <i>(" . basename(__FILE__) . ")</i></p>\r\n";
             }
         }
 
@@ -119,6 +144,10 @@ class Blog implements BlogInterface
      */
     public function savePostToDb(PDO $pdo)
     {
+        if (DEBUG_C) {
+            echo "<h3 class='debugClass'><b>Line  " . __LINE__ .  "</b>: Call to " . __METHOD__ . "() (<i>" . basename(__FILE__) . "</i>)</h3>\r\n";
+        }
+
         $query = 'INSERT INTO blog (blog_headline, blog_imagePath, blog_imageAlignment, blog_content, cat_id, usr_id)
                   VALUES (:ph_headline, :ph_imagepath, :ph_alignment, :ph_content, :ph_category, :ph_userid)';
         $map = [
@@ -134,6 +163,9 @@ class Blog implements BlogInterface
         $statement->execute($map);
         if ($statement->errorInfo()[2]) {
             logger('Could not save blogpost to database', $statement->errorInfo()[2]);
+            if (DEBUG_DB) {
+                echo "<p class='debug err'><b>Line " . __LINE__ . "</b>: " . $statement->errorInfo()[2] . " <i>(" . basename(__FILE__) . ")</i></p>\r\n";
+            }
         }
 
         $rowCount = $statement->rowCount();

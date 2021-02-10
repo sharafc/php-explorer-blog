@@ -27,6 +27,10 @@ class User implements UserInterface
         $this->setUsr_password($password);
         $this->setUsr_city($city);
         $this->setUsr_id($id);
+
+        if (DEBUG_CC) {
+            echo "<h3 class='debugClass hint'><b>Line " . __LINE__ .  "</b>: Call of " . __METHOD__ . "()  (<i>" . basename(__FILE__) . "</i>)</h3>\r\n";
+        }
     }
 
     /**
@@ -37,6 +41,10 @@ class User implements UserInterface
      */
     public function fetchFromDB(PDO $pdo)
     {
+        if (DEBUG_C) {
+            echo "<h3 class='debugClass'><b>Line  " . __LINE__ .  "</b>: Call to " . __METHOD__ . "() (<i>" . basename(__FILE__) . "</i>)</h3>\r\n";
+        }
+
         $query = 'SELECT * FROM user
                   WHERE usr_email = :ph_usr_email';
         $map = [
@@ -48,6 +56,9 @@ class User implements UserInterface
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         if ($statement->errorInfo()[2]) {
             logger('Could not fetch User from database', $statement->errorInfo()[2]);
+            if (DEBUG_DB) {
+                echo "<p class='debug err'><b>Line " . __LINE__ . "</b>: " . $statement->errorInfo()[2] . " <i>(" . basename(__FILE__) . ")</i></p>\r\n";
+            }
         }
 
         if ($result) {

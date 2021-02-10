@@ -8,6 +8,8 @@ define('DEBUG', true);          // Debugging for main document
 define('DEBUG_F', true);        // Debugging for functions
 define('DEBUG_ARRAY', true);    // Debugging for arrays
 define('DEBUG_DB', true);       // Debugging for database
+define('DEBUG_C', true);        // Debugging for classes
+define('DEBUG_CC', true);       // Debugging for class constructors
 
 /* Database options */
 define('DB_SYSTEM', 'mysql');
