@@ -128,7 +128,7 @@ if (isset($_POST['addBlogpostSent'])) {
 
             if ($newBlogpost->savePostToDb($pdo)) { // INSERT successfull
                 if (DEBUG) {
-                    echo "<p class='debug ok'><b>Line " . __LINE__ . "</b>: Blogpast saved with $blogpostId. <i>(" . basename(__FILE__) . ")</i></p>\r\n";
+                    echo "<p class='debug ok'><b>Line " . __LINE__ . "</b>: Blogpast saved with ID: " . $newBlogpost->getBlog_id() . " . <i>(" . basename(__FILE__) . ")</i></p>\r\n";
                 }
 
                 $transactionResultState = [

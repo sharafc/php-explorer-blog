@@ -38,7 +38,7 @@ function logger($message, $data = NULL, $type = LOGGER_ERROR, $logtype = LOGGER_
         fclose($logfile);
     }
 
-    // echo message and print out data. TODO: Make data type dependent
+    // echo message and print out data. TODO: Make data type dependent - still WIP
     if ($logtype & LOGGER_TYPE_SCREEN) {
         echo "<div class=\"" . $typeToLower . "\">";
         echo '<time datetime="' . $currentDate . '">' . $currentDate . ':&nbsp;</time>';

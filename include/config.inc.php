@@ -14,7 +14,7 @@ define('DEBUG_CC', true);       // Debugging for class constructors
 /* Database options */
 define('DB_SYSTEM', 'mysql');
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'blog_oop');
+define('DB_NAME', 'blog');
 define('DB_USER', 'root');
 define('DB_PWD', '');
 
