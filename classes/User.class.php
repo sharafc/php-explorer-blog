@@ -19,6 +19,16 @@ class User implements UserInterface
     private $usr_city;
     private $usr_password;
 
+    /**
+     * @construct
+     *
+     * @param string $firstname Firstname of a User
+     * @param string $lastname Lastname of a User
+     * @param string $email E-Mail adress of a User
+     * @param string $password Hashed password of a User
+     * @param string $city City of a User
+     * @param integer $id User Id from the database
+     */
     public function __construct($firstname = NULL, $lastname = NULL, $email = NULL, $password = NULL, $city = NULL, $id = NULL)
     {
         $this->setUsr_firstname($firstname);

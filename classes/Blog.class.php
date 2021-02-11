@@ -31,9 +31,9 @@ class Blog implements BlogInterface
      * @param string $alignment The alignment of the image
      * @param string $path The path to the image
      * @param string $date The creation date of the blogpost
-     * @param string $id The blogpost id
+     * @param integer $id The blogpost id
      */
-    public function __construct($headline = NULL, $content = NULL, $category = NULL, $user = NULL, $alignment = NULL, $path = NULL, $date = NULL, $id = NULL)
+    public function __construct($headline = NULL, $content = NULL, Category $category = NULL, User $user = NULL, $alignment = NULL, $path = NULL, $date = NULL, $id = NULL)
     {
         $this->setBlog_headline($headline);
         $this->setBlog_content($content);
