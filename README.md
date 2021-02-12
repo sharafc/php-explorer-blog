@@ -7,3 +7,7 @@ Initial version needed to be done with some not-standard compliant coding conven
 In the future:
 * want to change everything completely to a more modular approach and PSR
 * switch everything to OOP
+
+
+Version 2:
+Switched to OOP and MVC, still on Tutors demise.
