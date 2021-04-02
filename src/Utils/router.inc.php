@@ -34,16 +34,16 @@ if (count($request_parts) >= 3) {
 
 switch ($controller) {
     case 'home':
-        require_once('./controllers/home.php');
-        require_once('./views/home.php');
+        require_once(APP_PATH . 'Controller/home.php');
+        require_once(APP_PATH . '../templates/home.php');
         break;
     case 'dashboard':
-        require_once('./controllers/dashboard.php');
-        require_once('./views/dashboard.php');
+        require_once(APP_PATH . 'Controller/dashboard.php');
+        require_once(APP_PATH . '../templates/dashboard.php');
         break;
     default:
         http_response_code(404);
-        require_once('./views/404.php');
+        require_once(APP_PATH . '../templates/404.php');
         break;
 }
 

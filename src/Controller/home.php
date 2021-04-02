@@ -1,6 +1,6 @@
 <?php
-require_once('./models/categories.inc.php');
-require_once('./models/blogposts.inc.php');
+require_once(APP_PATH . 'Models/categories.inc.php');
+require_once(APP_PATH . 'Models/blogposts.inc.php');
 
 $categoryId = NULL;
 $blogpostId = NULL;

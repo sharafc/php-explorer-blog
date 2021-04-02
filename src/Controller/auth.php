@@ -1,5 +1,5 @@
 <?php
-require_once('./models/auth.inc.php');
+require_once(APP_PATH . 'Models/auth.inc.php');
 
 // Decide with page to link to in meta header, sadly str_contains only works in PHP8
 if (strpos($_SERVER['REQUEST_URI'], 'dashboard') !== false) {
