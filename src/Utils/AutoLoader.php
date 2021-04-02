@@ -1,20 +1,19 @@
 <?php
+
 namespace Utils;
+
 /**
  * Autoloader which loads Classes, Interfaces and Traits
  * Expects the usage of Namespaces
  *
  * Needs the following defined constants to work:
-  * APP_PATH -> Path to the directory containing Classes and Interfaces
+ * APP_PATH -> Path to the directory containing Classes and Interfaces
  *
  * SPL takes care of resolving the filename
  * @see https://www.php.net/manual/en/function.spl-autoload-register.php
- *
- * @param string $className The className of the file to be loaded
- * @return void
  */
-class AutoLoader {
-
+class AutoLoader
+{
     /**
      * autoload a given classname
      *
@@ -34,4 +33,3 @@ class AutoLoader {
         require_once($filename);
     }
 }
-

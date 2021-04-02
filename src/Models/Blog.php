@@ -2,6 +2,7 @@
 
 namespace Models;
 
+use Utils\DatabaseConnector;
 use PDO;
 
 /**
@@ -24,6 +25,7 @@ class Blog implements BlogInterface
     private $blog_imagePath;
     private Category $category;
     private User $user;
+    private PDO $dbConnection;
 
     /**
      * @construct
@@ -47,6 +49,7 @@ class Blog implements BlogInterface
         $this->setBlog_imagePath($path);
         $this->setBlog_date($date);
         $this->setBlog_id($id);
+        $this->setDbConnection(DatabaseConnector::dbConnect());
     }
 
     /**
@@ -58,8 +61,9 @@ class Blog implements BlogInterface
      * @param integer (optional) $blogpostId The blogpost id to fetch
      * @return array $blogPosts Array containing Blog objects which represent our blogposts
      */
-    public static function fetchPostsFromDb(PDO $pdo, $categoryId = NULL, $blogpostId = NULL)
+    public static function fetchPostsFromDb($categoryId = NULL, $blogpostId = NULL)
     {
+        $pdo = DatabaseConnector::dbConnect();
         /*
         * Build sql query
         * -> If category is set via action, only select blogposts from this category
@@ -117,10 +121,9 @@ class Blog implements BlogInterface
     /**
      * Save a blogpost to the database
      *
-     * @param PDO $pdo The PHP database object
      * @return bool True when saving was successful, otherwise false
      */
-    public function savePostToDb(PDO $pdo)
+    public function savePostToDb()
     {
         $query = 'INSERT INTO blog (blog_headline, blog_imagePath, blog_imageAlignment, blog_content, cat_id, usr_id)
                   VALUES (:ph_headline, :ph_imagepath, :ph_alignment, :ph_content, :ph_category, :ph_userid)';
@@ -133,7 +136,7 @@ class Blog implements BlogInterface
             'ph_userid' => $this->getUser()->getUsr_id()
         ];
 
-        $statement = $pdo->prepare($query);
+        $statement = $this->getDbConnection()->prepare($query);
         $statement->execute($map);
         if ($statement->errorInfo()[2]) {
             logger('Could not save blogpost to database', $statement->errorInfo()[2]);
@@ -141,7 +144,7 @@ class Blog implements BlogInterface
 
         $rowCount = $statement->rowCount();
         if ($rowCount) {
-            $lastInsertId = $pdo->lastInsertId();
+            $lastInsertId = $this->getDbConnection()->lastInsertId();
             $this->setBlog_id($lastInsertId);
             logger('Saving successful. Blogpost saved with ID: ', $lastInsertId, LOGGER_INFO);
 
@@ -278,4 +281,21 @@ class Blog implements BlogInterface
     {
         $this->user = $user;
     }
+
+    /**
+     * Get the value of dbConnection
+     */
+    public function getDbConnection()
+    {
+        return $this->dbConnection;
+    }
+
+    /**
+     * Set the value of dbConnection
+     */
+    public function setDbConnection(PDO $connection)
+    {
+        $this->dbConnection = $connection;
+    }
+
 }

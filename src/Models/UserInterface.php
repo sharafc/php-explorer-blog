@@ -11,7 +11,7 @@ interface UserInterface
 {
     public function __construct($firstname, $lastname, $email, $password, $city, $id);
 
-    public function fetchFromDB(PDO $pdo);
+    public function fetchFromDB();
 
     public function getUsr_id();
     public function setUsr_id($usr_id);
@@ -25,4 +25,6 @@ interface UserInterface
     public function setUsr_city($usr_city);
     public function getUsr_password();
     public function setUsr_password($usr_password);
+    public function getDbConnection();
+    public function setDbConnection(PDO $connection);
 }

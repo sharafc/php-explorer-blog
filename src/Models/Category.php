@@ -2,7 +2,9 @@
 
 namespace Models;
 
+use Utils\DatabaseConnector;
 use PDO;
+use PDOException;
 
 /**
  * Represents a blogposts Category with all its entities
@@ -18,6 +20,7 @@ use PDO;
 {
     private $cat_id;
     private $cat_name;
+    private PDO $dbConnection;
 
     /**
      * @construct
@@ -29,23 +32,31 @@ use PDO;
     {
         $this->setCat_id($id);
         $this->setCat_name($name);
+        $this->setDbConnection(DatabaseConnector::dbConnect());
     }
 
     /**
      * Fetches categories from the database.
      *
-     * @param PDO $pdo The PHP database object
      * @return array $categories Array containing Category objects which represent our categories
      */
-    public static function fetchAllFromDb(PDO $pdo)
+    public static function fetchAllFromDb()
     {
-        $statement = $pdo->prepare('SELECT * from category');
+        $categories = [];
+
+        $pdo = DatabaseConnector::dbConnect();
+
+        try {
+            $statement = $pdo->prepare('SELECT * from category');
+        } catch (PDOException $pdoException) {
+            logger('Could not prepare db connection', $pdoException);
+            return $categories;
+        }
+
         $statement->execute();
         if ($statement->errorInfo()[2]) {
             logger('Could not fetch categories from database', $statement->errorInfo()[2]);
         }
-
-        $categories = [];
 
         while ($result = $statement->fetch(PDO::FETCH_ASSOC)) {
             $categories[] = new Category(
@@ -60,17 +71,16 @@ use PDO;
     /**
      * Save a category to the database
      *
-     * @param PDO $pdo The PHP database object
      * @return bool True when saving was successful, otherwise false
      */
-    public function saveCategoryToDb(PDO $pdo)
+    public function saveCategoryToDb()
     {
         $query = 'INSERT INTO category (cat_name)
                   VALUES (:ph_category_name)';
         $map = [
             'ph_category_name' => $this->getCat_name()
         ];
-        $statement = $pdo->prepare($query);
+        $statement = $this->getDbConnection()->prepare($query);
         $statement->execute($map);
         if ($statement->errorInfo()[2]) {
             logger('Could not save category ' . $this->getCat_name() . ' to database', $statement->errorInfo()[2]);
@@ -78,7 +88,7 @@ use PDO;
 
         $rowCount = $statement->rowCount();
         if ($rowCount) {
-            $lastInsertId = $pdo->lastInsertId();
+            $lastInsertId = $this->getDbConnection()->lastInsertId();
             $this->setCat_id($lastInsertId);
             logger('Saving successful. Category saved with ID: ', $lastInsertId, LOGGER_INFO);
 
@@ -91,17 +101,16 @@ use PDO;
     /**
      * Check if a category already exists in the database
      *
-     * @param PDO $pdo The PHP database object
      * @return bool True when category exists, otherwise false
      */
-    public function checkIfCategoryExists(PDO $pdo)
+    public function checkIfCategoryExists()
     {
         $query = 'SELECT COUNT(cat_name) FROM category
                   WHERE cat_name = :ph_category_name';
         $map = [
             'ph_category_name' => $this->getcat_name()
         ];
-        $statement = $pdo->prepare($query);
+        $statement = $this->getDbConnection()->prepare($query);
         $statement->execute($map);
         $count = $statement->fetchColumn();
         if ($statement->errorInfo()[2]) {
@@ -144,5 +153,21 @@ use PDO;
     public function setCat_name($cat_name)
     {
         $this->cat_name = $cat_name;
+    }
+
+    /**
+     * Get the value of dbConnection
+     */
+    public function getDbConnection()
+    {
+        return $this->dbConnection;
+    }
+
+    /**
+     * Set the value of dbConnection
+     */
+    public function setDbConnection(PDO $connection)
+    {
+        $this->dbConnection = $connection;
     }
 }

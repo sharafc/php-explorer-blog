@@ -32,12 +32,12 @@ switch ($action) {
 
 // Fetch all categories for navigation
 // TODO: Try/Catch
-$categories = Category::fetchAllFromDb($pdo);
+$categories = Category::fetchAllFromDb();
 
 /*
  * Fetch blogposts
  * -> If category is set via action, only select blogposts from this category
  * -> if blogId is set via action, only select this blogpost to display
  */
-$blogPosts = Blog::fetchPostsFromDb($pdo, $categoryId, $blogpostId);
+$blogPosts = Blog::fetchPostsFromDb($categoryId, $blogpostId);
 

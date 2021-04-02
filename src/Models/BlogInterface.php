@@ -11,9 +11,9 @@ interface BlogInterface
 {
     public function __construct($headline, $content, Category $category, User $user, $alignment, $path, $date, $id);
 
-    public static function fetchPostsFromDb(PDO $pdo, $categoryId, $blogpostId);
+    public static function fetchPostsFromDb($categoryId, $blogpostId);
 
-    public function savePostToDb(PDO $pdo);
+    public function savePostToDb();
 
     public function getBlog_id();
     public function setBlog_id($blog_id);
@@ -31,4 +31,6 @@ interface BlogInterface
     public function setCategory(Category $category);
     public function getUser();
     public function setUser(User $user);
+    public function getDbConnection();
+    public function setDbConnection(PDO $connection);
 }

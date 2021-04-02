@@ -13,6 +13,9 @@
  * - /$controller/$action
  * - /$controller/$action/$params{0,}
  */
+
+use Utils\DatabaseConnector;
+
 $request = str_replace(DOMAIN_SUB_STRUCTURE, '', $_SERVER['REQUEST_URI']);
 $request = trim($request, '/');
 $request_parts = explode('/', $request);

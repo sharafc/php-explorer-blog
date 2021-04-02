@@ -5,7 +5,7 @@ use Models\Category;
 use Models\Blog;
 
 // Fetch all categories for blogpost form
-$categories = Category::fetchAllFromDb($pdo);
+$categories = Category::fetchAllFromDb();
 
 // Handle add category form
 if (isset($_POST['addCategorySent'])) {
@@ -17,8 +17,8 @@ if (isset($_POST['addCategorySent'])) {
         // Initialise Category object
         $newCategory = new Category(NULL, $formCategory);
 
-        if (!$newCategory->checkIfCategoryExists($pdo)) { // No entry found, save to db
-            if ($newCategory->saveCategoryToDb($pdo)) { // INSERT successfull
+        if (!$newCategory->checkIfCategoryExists()) { // No entry found, save to db
+            if ($newCategory->saveCategoryToDb()) { // INSERT successfull
                 $transactionResultState = [
                     'state' => 'success',
                     'message' => 'Category ' . $newCategory->getCat_name() . ' saved to database with ID: ' . $newCategory->getCat_id()

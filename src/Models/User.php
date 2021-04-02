@@ -2,6 +2,7 @@
 
 namespace Models;
 
+use Utils\DatabaseConnector;
 use PDO;
 
 /**
@@ -22,6 +23,7 @@ class User implements UserInterface
     private $usr_email;
     private $usr_city;
     private $usr_password;
+    private PDO $dbConnection;
 
     /**
      * @construct
@@ -41,22 +43,22 @@ class User implements UserInterface
         $this->setUsr_password($password);
         $this->setUsr_city($city);
         $this->setUsr_id($id);
+        $this->setDbConnection(DatabaseConnector::dbConnect());
     }
 
     /**
      * Fetch a user from the database and populate the object with the fetched data
      *
-     * @param PDO $pdo The PHP database object
      * @return void
      */
-    public function fetchFromDB(PDO $pdo)
+    public function fetchFromDB()
     {
         $query = 'SELECT * FROM user
                   WHERE usr_email = :ph_usr_email';
         $map = [
             'ph_usr_email' => $this->getUsr_email()
         ];
-        $statement = $pdo->prepare($query);
+        $statement = $this->getDbConnection()->prepare($query);
         $statement->execute($map);
 
         $result = $statement->fetch(PDO::FETCH_ASSOC);
@@ -168,5 +170,21 @@ class User implements UserInterface
     public function setUsr_password($usr_password)
     {
         $this->usr_password = $usr_password;
+    }
+
+    /**
+     * Get the value of dbConnection
+     */
+    public function getDbConnection()
+    {
+        return $this->dbConnection;
+    }
+
+    /**
+     * Set the value of dbConnection
+     */
+    public function setDbConnection(PDO $connection)
+    {
+        $this->dbConnection = $connection;
     }
 }

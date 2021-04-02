@@ -49,7 +49,7 @@ if (isset($_POST['loginSent'])) {
     if (count($errorMap) === 0) {
         $currentUser = new User();
         $currentUser->setUsr_email($login['useremail']);
-        $currentUser->fetchFromDB($pdo);
+        $currentUser->fetchFromDB();
 
         // Store passwordHash since it is reused and enables easier check
         $passwordHash = $currentUser->getUsr_password();
