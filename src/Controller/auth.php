@@ -5,6 +5,9 @@ require_once(APP_PATH . 'Models/User.php');
 
 use Models\User;
 
+use Utils\GenericHelper;
+use Utils\Forms\Validator;
+
 /**
  * Basic controller for Authentification.
  * Delegates to dashboard view and calls User model
@@ -32,14 +35,15 @@ if (strpos($_SERVER['REQUEST_URI'], 'dashboard') !== false) {
 
 // Handle login and check if account is correct
 if (isset($_POST['loginSent'])) {
+    $formValidator = new Validator();
 
     foreach ($_POST['login'] as $key => $value) {
-        $login[$key] = cleanString($value);
+        $login[$key] = GenericHelper::cleanString($value);
     }
 
     $error = [
-        'useremail' => checkEmail($login['useremail']),
-        'password' => checkInputString($login['password'], 4)
+        'useremail' => $formValidator->checkEmail($login['useremail']),
+        'password' => $formValidator->checkInputString($login['password'], 4)
     ];
 
     // Remove whitespaces and empty values from error array

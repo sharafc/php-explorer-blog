@@ -3,6 +3,8 @@
 use Models\Category;
 use Models\Blog;
 
+use Utils\GenericHelper;
+
 /**
  * Basic controller for Home.
  * Delegates to home view and calls Category, User and Blog model
@@ -23,10 +25,10 @@ switch ($action) {
         header('Location: /home');
         exit; // Terminating keyword as of PSR-12
     case 'showCategory':
-        $categoryId = cleanString($params[0]);
+        $categoryId = GenericHelper::cleanString($params[0]);
         break;
     case 'showBlogpost':
-        $blogpostId = cleanString($params[0]);
+        $blogpostId = GenericHelper::cleanString($params[0]);
         break;
 }
 

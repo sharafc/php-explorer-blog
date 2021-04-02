@@ -4,14 +4,18 @@ use Models\User;
 use Models\Category;
 use Models\Blog;
 
+use Utils\Forms\Validator;
+use Utils\GenericHelper;
+
 // Fetch all categories for blogpost form
 $categories = Category::fetchAllFromDb();
 
 // Handle add category form
 if (isset($_POST['addCategorySent'])) {
+    $formValidator = new Validator();
     // Escape field value and check for validity
-    $formCategory = cleanString($_POST['category']);
-    $errorMessage = checkInputString($formCategory);
+    $formCategory = GenericHelper::cleanString($_POST['category']);
+    $errorMessage = $formValidator->checkInputString($formCategory);
 
     if (!$errorMessage) { // No errors
         // Initialise Category object
@@ -42,13 +46,13 @@ if (isset($_POST['addCategorySent'])) {
 if (isset($_POST['addBlogpostSent'])) {
     // Clean post array values of potential risks
     foreach ($_POST['blogentry'] as $key => $value) {
-        $blogentry[$key] = cleanString($value);
+        $blogentry[$key] = GenericHelper::cleanString($value);
     }
 
     // Validate fields and assign errors
     $error = [
-        'headline' => checkInputString($blogentry['headline']),
-        'content' => checkInputString($blogentry['content'], 200, 40000)
+        'headline' => $formValidator->checkInputString($blogentry['headline']),
+        'content' =>  $formValidator->checkInputString($blogentry['content'], 200, 40000)
     ];
 
     // Remove whitespaces and empty values from error array
@@ -68,7 +72,7 @@ if (isset($_POST['addBlogpostSent'])) {
             $errorImageUpload = $imageUpload['error'];
         } else { // Upload successfull or no image given -> process form
             $currentUser = new User();
-            $currentUser->setUsr_id(cleanString($_SESSION["id"]));
+            $currentUser->setUsr_id(GenericHelper::cleanString($_SESSION["id"]));
 
             // Initialise Blog object
             $newBlogpost = new Blog(
@@ -80,7 +84,7 @@ if (isset($_POST['addBlogpostSent'])) {
                 (is_null($imageUpload) ? NULL : $imageUpload['path'])
             );
 
-            if ($newBlogpost->savePostToDb($pdo)) { // INSERT successfull
+            if ($newBlogpost->savePostToDb()) { // INSERT successfull
                 $transactionResultState = [
                     'state' => 'success',
                     'message' => 'Blogpost with ID ' . $newBlogpost->getBlog_id() . ' saved to database.'

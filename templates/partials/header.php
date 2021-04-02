@@ -1,11 +1,13 @@
-
+<?php
+use Utils\GenericHelper;
+?>
 <header>
     <!-- "Profile" links or login form -->
     <?php if (isset($_SESSION['id'])) : ?>
         <div class="header-meta">
             <?php if (isset($_SESSION['firstname']) && isset($_SESSION['lastname'])) : ?>
                 <span>
-                    <img src="<?= DOMAIN_SUB_STRUCTURE ?>/statics/images/avatar.svg"><?= cleanString($_SESSION['firstname']) ?> <?= cleanString($_SESSION['lastname']) ?>
+                    <img src="<?= DOMAIN_SUB_STRUCTURE ?>/statics/images/avatar.svg"><?= GenericHelper::cleanString($_SESSION['firstname']) ?> <?= GenericHelper::cleanString($_SESSION['lastname']) ?>
                 </span>
             <?php endif ?>
             <span>

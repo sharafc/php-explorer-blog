@@ -2,6 +2,7 @@
 
 use Utils\DatabaseConnector;
 use Utils\Router;
+use Utils\GenericHelper;
 
 require_once('../config/config.inc.php');
 require_once('../config/autoLoader_config.inc.php');
@@ -16,11 +17,12 @@ spl_autoload_register('Utils\AutoLoader::load');
 require_once('Utils/logger.inc.php');
 require_once('Utils/sessions.inc.php');
 //require_once('Utils/db.inc.php');
-require_once('Utils/form.inc.php');
-require_once('Utils/date_time.inc.php');
+//require_once('Utils/form.inc.php');
+//require_once('Utils/date_time.inc.php');
 require_once('Utils/upload_image.inc.php');
 
 DatabaseConnector::dbConnect();
+
 
 require_once('Controller/auth.php');
 ?>
