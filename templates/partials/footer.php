@@ -1,3 +1,3 @@
 <footer>
-    Created with 💔 and 🤕 by Christian Sharaf
+    Created with 🧑🏻‍💻 and 👾 by Christian Sharaf
 </footer>

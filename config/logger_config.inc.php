@@ -1,7 +1,7 @@
 <?php
 
 /* Errors */
-define('LOGGER_FILE_PATH', 'logs' . DIRECTORY_SEPARATOR);
+define('LOGGER_FILE_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR);
 define('LOGGER_INFO', 'INFO');
 define('LOGGER_WARNING', 'WARN');
 define('LOGGER_ERROR', 'ERROR');

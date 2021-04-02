@@ -1,5 +1,9 @@
 <?php
 
+namespace Models;
+
+use PDO;
+
 /**
  * Represents a blogposts Category with all its entities
  * Is also used to build up navigation items.
@@ -10,7 +14,7 @@
  * @copyright 2021 Christian Sharaf
  * @version 1.0.0
  */
-class Category implements CategoryInterface
+ class Category implements CategoryInterface
 {
     private $cat_id;
     private $cat_name;

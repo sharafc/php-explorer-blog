@@ -1,31 +1,27 @@
 <?php
-require_once('./models/categories.inc.php');
-require_once('./models/blogposts.inc.php');
 
-// Fetch all categories for select
-$categories = getAllCategories();
+use Models\User;
+use Models\Category;
+use Models\Blog;
+
+// Fetch all categories for blogpost form
+$categories = Category::fetchAllFromDb($pdo);
 
 // Handle add category form
 if (isset($_POST['addCategorySent'])) {
-    logger('Category form was sent', $_POST['category'], LOGGER_INFO, LOGGER_TYPE_CONSOLE);
-
     // Escape field value and check for validity
     $formCategory = cleanString($_POST['category']);
     $errorMessage = checkInputString($formCategory);
 
-    // Check if category already exists
-    if (!$errorMessage) {  // No errors
+    if (!$errorMessage) { // No errors
+        // Initialise Category object
+        $newCategory = new Category(NULL, $formCategory);
 
-        $count = countCategoriesByName($formCategory);
-
-        if ($count == 0) { // No entry found, save to db
-
-            $categoryRowCount = insertCategoryByName($formCategory);
-
-            if ($categoryRowCount) { // INSERT successfull
+        if (!$newCategory->checkIfCategoryExists($pdo)) { // No entry found, save to db
+            if ($newCategory->saveCategoryToDb($pdo)) { // INSERT successfull
                 $transactionResultState = [
                     'state' => 'success',
-                    'message' => "Category $formCategory saved to database."
+                    'message' => 'Category ' . $newCategory->getCat_name() . ' saved to database with ID: ' . $newCategory->getCat_id()
                 ];
 
                 // Empty form field
@@ -37,15 +33,13 @@ if (isset($_POST['addCategorySent'])) {
                 ];
             }
         } else { // Category already exists
-            $errorMessage = 'Category already exists.';
+            $errorMessage = 'Category ' . $newCategory->getCat_name() . ' already exists.';
         }
     }
 }
 
 // Handle add blogpost form
 if (isset($_POST['addBlogpostSent'])) {
-    logger('Blog form was sent', $_POST['blogentry'], LOGGER_INFO, LOGGER_TYPE_CONSOLE);
-
     // Clean post array values of potential risks
     foreach ($_POST['blogentry'] as $key => $value) {
         $blogentry[$key] = cleanString($value);
@@ -65,7 +59,6 @@ if (isset($_POST['addBlogpostSent'])) {
     if (count($errorMap) === 0) { // No errors
         // Form has no field errors, handle image if exists
         if ($_FILES['image']['tmp_name']) {
-            logger('Uploading image', $_FILES['image']['tmp_name'], LOGGER_INFO, LOGGER_TYPE_CONSOLE);
             $imageUpload = uploadImage($_FILES['image']);
         } else {
             $imageUpload = NULL;
@@ -74,18 +67,24 @@ if (isset($_POST['addBlogpostSent'])) {
         if (isset($imageUpload['error'])) { // Upload or image validation failed
             $errorImageUpload = $imageUpload['error'];
         } else { // Upload successfull or no image given -> process form
+            $currentUser = new User();
+            $currentUser->setUsr_id(cleanString($_SESSION["id"]));
 
-            $rowCount = insertBlogpost($blogentry, ($imageUpload['path'] ?? NULL));
+            // Initialise Blog object
+            $newBlogpost = new Blog(
+                $blogentry['headline'],
+                $blogentry['content'],
+                new Category($blogentry['category']),
+                $currentUser,
+                $blogentry['imageAlignment'],
+                (is_null($imageUpload) ? NULL : $imageUpload['path'])
+            );
 
-            if ($rowCount) { // INSERT successfull
-                $blogpostId = $pdo->lastInsertId();
-                logger('Blogpost saved with:', $blogpostId, LOGGER_INFO, LOGGER_TYPE_CONSOLE);
-
+            if ($newBlogpost->savePostToDb($pdo)) { // INSERT successfull
                 $transactionResultState = [
                     'state' => 'success',
-                    'message' => "Blogpost with ID $blogpostId saved to database."
+                    'message' => 'Blogpost with ID ' . $newBlogpost->getBlog_id() . ' saved to database.'
                 ];
-
                 // Clear form fields
                 $blogentry = [];
             } else { // INSERT failed

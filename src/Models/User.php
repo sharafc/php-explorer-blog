@@ -1,5 +1,9 @@
 <?php
 
+namespace Models;
+
+use PDO;
+
 /**
  * Represents a User with all its entities
  * A User is needed to log in and create blogposts

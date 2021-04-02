@@ -1,5 +1,9 @@
 <?php
 
+namespace Models;
+
+use PDO;
+
 /**
  * Represents a blogpost with all its entities.
  * Needs a Category and User class

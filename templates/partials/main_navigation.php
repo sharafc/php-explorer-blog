@@ -3,7 +3,7 @@
     <?php if ($categories) : ?>
         <?php foreach ($categories as $category) : ?>
             <span>
-                <a href="/home/showCategory/<?= $category['cat_id'] ?>" class="<?= $category['cat_id'] == $categoryId ? 'active' : ''  ?>"><?= $category['cat_name'] ?></a>
+                <a href="/home/showCategory/<?= $category->getCat_id() ?>" class="<?= $category->getCat_id() == $categoryId ? 'active' : ''  ?>"><?= $category->getCat_name() ?></a>
             </span>
         <?php endforeach ?>
     <?php endif ?>

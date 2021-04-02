@@ -1,5 +1,9 @@
 <?php
 
+namespace Models;
+
+use PDO;
+
 /**
  * Describes a user
  */
